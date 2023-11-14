@@ -40,7 +40,7 @@ function MobileScanner() {
     if (decodedText) {
       setScannedID(decodedText);
       axios
-        .get(`${serverEndpointSwitch}/api/v1/qr-single/${decodedText}`)
+        .get(`${serverEndpointSwitch}/api/v1/qr-singles/${decodedText}`)
         .then((response) => {
           axios
             .get(

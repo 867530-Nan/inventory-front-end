@@ -12,7 +12,7 @@ import Home from "./components/Home";
 import Logout from "./components/Logout";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
-import Services from "./components/Services";
+import Styles from "./components/styles";
 import Dashboard from "./components/Dashboard";
 import Contact from "./components/Contact";
 import NotFound from "./components/NotFound";
@@ -43,11 +43,11 @@ const Router = () => {
   return (
     <BrowserRouter>
       <div className="flex h-100vh overflow-hidden">
-        <div className="w-2/6 h-screen">
+        <div className="h-screen">
           {isNotMobile && <DesktopNav />}
           {isMobile && <MobileNav />}
         </div>
-        <div className="w-4/6 h-full">
+        <div className="flex-1 h-full">
           <Routes>
             {/* <PrivateRoute path="new-style/*" element={<NewStyle />} />
           <PrivateRoute path="update-profile/" element={<UpdateProfile />} /> */}
@@ -59,8 +59,8 @@ const Router = () => {
               }
             />
             <Route
-              path="services/*"
-              element={currentUser ? <Services /> : <Navigate replace to="/" />}
+              path="styles/*"
+              element={currentUser ? <Styles /> : <Navigate replace to="/" />}
             />
             <Route
               path="dashboard/*"

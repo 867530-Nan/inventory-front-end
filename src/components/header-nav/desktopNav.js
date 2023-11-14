@@ -4,15 +4,18 @@ import { auth } from "../../firebase";
 
 export default function DesktopNav() {
   const { currentUser } = auth;
-  console.log("the auth obj", auth);
+
   const navList = [
     { to: "/dashboard", title: "Dashboard" },
     { to: "/mobile-scanner", title: "Scanner" },
-    { to: "/contact", title: "Contact" },
+    { to: "/styles", title: "Styles" },
     { to: "/", title: "Login" },
   ];
   return (
-    <div className="flex flex-col justify-between h-full">
+    <div
+      className="flex flex-col justify-between h-full"
+      style={{ maxWidth: 200 }}
+    >
       <ul className="flex flex-col align-center mt-4">
         {navList.map((s) => {
           return (

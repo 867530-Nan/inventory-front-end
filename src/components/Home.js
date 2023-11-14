@@ -16,7 +16,7 @@ function Home() {
   const onNewScanResult = (decodedText, decodedResult) => {
     if (decodedText) {
       axios
-        .get(`${serverEndpointSwitch}/api/v1/qr-single/${decodedText}`)
+        .get(`${serverEndpointSwitch}/api/v1/qr-singles/${decodedText}`)
         .then((response) => {
           console.log("POST request successful:", response.data[0]);
           setText(response.data[0]);
