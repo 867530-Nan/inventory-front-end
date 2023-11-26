@@ -15,7 +15,7 @@ export default function MobileNav() {
         <NavLink to="/new-style">NewStyle</NavLink>
       </li>
       <li>
-        <NavLink to="/mobile-scanner">Scanner</NavLink>
+        <NavLink to="/checkout-dashboard">Check In / Out</NavLink>
       </li>
       <li>
         <NavLink to="/contact">Contact</NavLink>

@@ -4,11 +4,11 @@ import { useNavigate } from "react-router-dom";
 
 export default function Logout() {
   const { logout } = useAuth();
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   React.useEffect(async () => {
     await logout();
-    history.push("/login");
+    navigate("/login");
   }, []);
 
   return <h1>logout</h1>;

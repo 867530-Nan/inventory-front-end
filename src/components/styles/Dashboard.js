@@ -16,7 +16,8 @@ const Dashboard = ({ onRowClick }) => {
         const response = await axios.get(
           `${serverEndpointSwitch}/api/v1/styles/dashboard-info`,
         );
-        setStyles(response.data);
+        console.log("the response", response);
+        response?.data && setStyles(response.data);
       } catch (error) {
         console.error("Error fetching styles:", error);
       }

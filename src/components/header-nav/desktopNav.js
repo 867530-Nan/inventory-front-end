@@ -7,7 +7,7 @@ export default function DesktopNav() {
 
   const navList = [
     { to: "/dashboard", title: "Dashboard" },
-    { to: "/mobile-scanner", title: "Scanner" },
+    { to: "/checkout-dashboard", title: "Check In / Out" },
     { to: "/styles", title: "Styles" },
     { to: "/", title: "Login" },
   ];

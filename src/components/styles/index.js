@@ -5,7 +5,7 @@ import StylesForm from "./StylesForm";
 import React, { useState } from "react";
 import Inspector from "./Inspector";
 
-function UncontrolledExample() {
+function Index() {
   const [key, setKey] = useState("dashboard");
   const [passedStyle, setPassedStyle] = useState(null);
 
@@ -34,4 +34,4 @@ function UncontrolledExample() {
   );
 }
 
-export default UncontrolledExample;
+export default Index;

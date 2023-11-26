@@ -12,9 +12,9 @@ function MobileScanner() {
   const [showInfoModal, setShowInfoModal] = React.useState(false);
   const [successfulCheckout, setSuccessfullCheckout] = React.useState(false);
   const [scannedID, setScannedID] = React.useState(undefined);
-  const [scannedObj, setScannedObj] = React.useState(undefined);
+  const [scannedStyle, setScannedStyle] = React.useState({});
   const [customerEmail, setCustomerEmail] = React.useState(undefined);
-  const [foundCheckout, setFoundCheckout] = React.useState(undefined);
+  const [foundCheckout, setFoundCheckout] = React.useState([]);
   const [successfulCheckin, setSuccessfulCheckin] = React.useState(false);
   React.useEffect(() => {
     if (successfulCheckout) {
@@ -40,18 +40,14 @@ function MobileScanner() {
     if (decodedText) {
       setScannedID(decodedText);
       axios
-        .get(`${serverEndpointSwitch}/api/v1/qr-singles/${decodedText}`)
+        .get(
+          `${serverEndpointSwitch}/api/v1/qr-singles/${decodedText}/style-and-checkouts`,
+        )
         .then((response) => {
-          axios
-            .get(
-              `${serverEndpointSwitch}/api/v1/checkouts/qr-check/${decodedText}`,
-            )
-            .then((res) => {
-              setFoundCheckout(res.data);
-            })
-            .catch((err) => console.error("no luck on the checkout", err));
-          setScannedObj(response.data[0]);
+          console.log("styyles checkouts", response);
+          setScannedStyle(response.data.style[0]);
           setShowInfoModal(true);
+          setFoundCheckout(response.data.checkouts);
         })
         .catch((error) => {
           console.error("POST request failed:", error);
@@ -65,12 +61,13 @@ function MobileScanner() {
   console.log("setFoundCheckout", foundCheckout);
 
   const onCheckOut = () => {
-    setScannedObj(undefined);
+    setScannedStyle(undefined);
     const currentDateTime = moment();
     const checkOutData = {
       customer_email: customerEmail,
       qr_single_id: scannedID,
       checkout_date: currentDateTime.format("YYYY-MM-DD HH:mm:ss"),
+      style_id: scannedStyle.id,
     };
 
     axios
@@ -88,7 +85,7 @@ function MobileScanner() {
   };
 
   const onCheckIn = () => {
-    setScannedObj(undefined);
+    setScannedStyle(undefined);
     const currentDateTime = moment();
     const checkOutData = {
       checkin_date: currentDateTime.format("YYYY-MM-DD HH:mm:ss"),
@@ -111,7 +108,7 @@ function MobileScanner() {
   };
 
   function handleModalClose() {
-    setScannedObj(undefined);
+    setScannedStyle(undefined);
     setCustomerEmail(undefined);
     setFoundCheckout(false);
   }
@@ -135,21 +132,23 @@ function MobileScanner() {
           />
         </div>
       )}
-      {scannedObj && (
+      {scannedStyle && (
         <>
           <ScannedModal
             showModal={showInfoModal}
             setShowModal={setShowInfoModal}
-            infoObj={scannedObj}
+            infoObj={scannedStyle}
             onCheckInClick={() => {
               onCheckIn();
             }}
             onCheckoutClick={() => {
               onCheckOut();
             }}
-            disableCheckout={foundCheckout}
+            disableCheckout={foundCheckout.length}
             customerEmail={
-              foundCheckout ? foundCheckout.customer_email : customerEmail
+              foundCheckout.length
+                ? foundCheckout.customer_email
+                : customerEmail
             }
             setCustomerEmail={setCustomerEmail}
             handleModalClose={handleModalClose}

@@ -7,6 +7,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { useMediaQuery } from "react-responsive";
+import { auth } from "./firebase";
 
 import Home from "./components/Home";
 import Logout from "./components/Logout";
@@ -23,7 +24,7 @@ import MobileScanner from "./components/MobileScanner";
 import MobileNav from "./components/header-nav/mobileNav";
 import DesktopNav from "./components/header-nav/desktopNav";
 import TabletNav from "./components/header-nav/tabletNav";
-import { auth } from "./firebase";
+import CheckoutDashboard from "./components/CheckoutDashboard";
 
 const Router = () => {
   const { currentUser } = auth;
@@ -33,6 +34,8 @@ const Router = () => {
   const isMobile = useMediaQuery({ query: "(max-width: 768px)" });
 
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
+
+  console.log("your time", currentUser);
 
   const determineHome = () => {
     if (isNotMobile) return <Dashboard />;
@@ -53,9 +56,13 @@ const Router = () => {
           <PrivateRoute path="update-profile/" element={<UpdateProfile />} /> */}
             {/* <PrivateRoute path="mobile-scanner/" element={<MobileScanner />} /> */}
             <Route
-              path="/mobile-scanner"
+              path="/checkout-dashboard"
               element={
-                currentUser ? <MobileScanner /> : <Navigate replace to="/" />
+                currentUser ? (
+                  <CheckoutDashboard />
+                ) : (
+                  <Navigate replace to="/" />
+                )
               }
             />
             <Route
