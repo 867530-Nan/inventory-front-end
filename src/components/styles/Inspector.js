@@ -2,42 +2,24 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import QRCode from "react-qr-code";
 import { serverEndpointSwitch } from "../../utils/common";
+import { useStylesContext } from "../../contexts/StylesContext";
 
-const Inspector = ({ passedStyle }) => {
-  const [styles, setStyles] = useState([]);
-  const [selectedStyleId, setSelectedStyleId] = useState(null);
+const Inspector = ({}) => {
   const [checkouts, setCheckouts] = useState([]);
   const [qrCodes, setQrCodes] = useState([]);
 
-  useEffect(() => {
-    try {
-      axios
-        .get(`${serverEndpointSwitch}/api/v1/styles`)
-        .then((res) => {
-          console.log("all styles", res);
-          setStyles(res.data);
-        })
-        .catch((err) => console.error("all styles error", err));
-    } catch (error) {
-      console.error("Error fetching QR codes:", error);
-    }
-  }, []);
-
-  useEffect(() => {
-    console.log("the passed style", passedStyle);
-    setSelectedStyleId(passedStyle);
-  }, [passedStyle]);
+  const { styles, selectStyle, selectedStyle } = useStylesContext();
 
   useEffect(() => {
     // Fetch QR codes when the selected style changes
     const fetchQRCodes = async () => {
-      if (selectedStyleId) {
+      if (selectedStyle) {
         try {
-          const response = await axios.get(
-            `${serverEndpointSwitch}/api/v1/styles/get-style-info/${selectedStyleId}`,
+          const response = await axios.post(
+            `${serverEndpointSwitch}/api/v1/styles/get-style-info-by-name`,
+            { name: selectedStyle[0].name },
           );
-          setQrCodes(response.data.qrSingles);
-          setCheckouts(response.data.checkouts);
+          console.log("the response");
         } catch (error) {
           console.error("Error fetching QR codes:", error);
         }
@@ -45,16 +27,16 @@ const Inspector = ({ passedStyle }) => {
     };
 
     fetchQRCodes();
-  }, [selectedStyleId]);
+  }, [selectedStyle]);
 
   const handleStyleChange = (event) => {
-    setSelectedStyleId(event.target.value);
+    selectStyle(event.target.value);
   };
 
   return (
     <div>
       <label>Select a style:</label>
-      <select onChange={handleStyleChange} value={selectedStyleId}>
+      <select onChange={handleStyleChange} value={selectedStyle?.id}>
         <option value={null}>Select a style</option>
         {styles.length &&
           styles.map((style) => (
@@ -64,7 +46,7 @@ const Inspector = ({ passedStyle }) => {
           ))}
       </select>
 
-      {selectedStyleId && (
+      {selectedStyle && (
         <table>
           <thead>
             <tr>

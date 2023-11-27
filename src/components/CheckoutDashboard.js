@@ -3,6 +3,7 @@ import "./styles/CheckoutDashboard.css";
 import Autocomplete from "react-google-autocomplete";
 import axios from "axios";
 import { serverEndpointSwitch } from "../utils/common";
+
 const SampleForm = () => {
   const [customerName, setCustomerName] = useState("");
   const [customerAddress, setCustomerAddress] = useState("");

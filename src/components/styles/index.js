@@ -4,14 +4,17 @@ import Dashboard from "./Dashboard";
 import StylesForm from "./StylesForm";
 import React, { useState } from "react";
 import Inspector from "./Inspector";
+import { useStylesContext } from "../../contexts/StylesContext";
 
 function Index() {
   const [key, setKey] = useState("dashboard");
   const [passedStyle, setPassedStyle] = useState(null);
+  const { selectStyle } = useStylesContext();
 
-  const handleStyleClick = (styleId) => {
+  const handleStyleClick = (style) => {
+    selectStyle(style);
     setKey("single");
-    setPassedStyle(styleId);
+    setPassedStyle(style.id);
   };
 
   return (

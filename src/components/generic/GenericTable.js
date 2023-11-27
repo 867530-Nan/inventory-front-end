@@ -1,52 +1,98 @@
 import React from "react";
+import { useTable, usePagination } from "react-table";
 
-export default function GenericTable({ headerRows, bodyRows }) {
-  function displayBodyRows() {
-    return bodyRows;
-  }
+const GenericTable = ({ onRowClick, columns, data }) => {
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    page,
+    nextPage,
+    previousPage,
+    canNextPage,
+    canPreviousPage,
+    pageOptions,
+    state,
+    prepareRow,
+  } = useTable(
+    {
+      columns,
+      data,
+      initialState: { pageIndex: 0 }, // Optional: set initial page index
+    },
+    usePagination,
+  );
 
-  function displayHeadRows() {
-    return headerRows;
-  }
+  const { pageIndex } = state;
 
   return (
-    <div className="flex flex-col">
-      <div className="overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="inline-block min-w-full py-2 sm:px-6 lg:px-8">
-          <div className="overflow-hidden">
-            <table className="min-w-full text-left text-sm font-light">
-              <thead className="border-b font-medium dark:border-neutral-500">
-                {displayHeadRows()}
-              </thead>
-              <tbody>{displayBodyRows()}</tbody>
-            </table>
-          </div>
-        </div>
+    <div>
+      <table
+        {...getTableProps()}
+        style={{ borderCollapse: "collapse", width: "100%" }}
+      >
+        <thead>
+          {headerGroups.map((headerGroup) => (
+            <tr
+              {...headerGroup.getHeaderGroupProps()}
+              style={{ borderBottom: "1px solid #ddd" }}
+            >
+              {headerGroup.headers.map((column) => (
+                <th
+                  {...column.getHeaderProps()}
+                  style={{
+                    padding: "8px",
+                    textAlign: "left",
+                    borderBottom: "1px solid #ddd",
+                  }}
+                >
+                  {column.render("Header")}
+                </th>
+              ))}
+            </tr>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {page.map((row) => {
+            prepareRow(row);
+            return (
+              <tr
+                {...row.getRowProps()}
+                style={{ borderBottom: "1px solid #ddd" }}
+                className="border border-gray-600 cursor-pointer hover:bg-gray-200"
+                onClick={() => onRowClick(row.original)}
+              >
+                {row.cells.map((cell) => (
+                  <td
+                    {...cell.getCellProps()}
+                    style={{
+                      padding: "8px",
+                      borderBottom: "1px solid #ddd",
+                    }}
+                  >
+                    {cell.render("Cell")}
+                  </td>
+                ))}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      <div style={{ marginTop: "10px" }}>
+        <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+          Previous
+        </button>
+        <span style={{ margin: "0 10px" }}>
+          <strong>
+            {pageIndex + 1} of {pageOptions.length}
+          </strong>{" "}
+        </span>
+        <button onClick={() => nextPage()} disabled={!canNextPage}>
+          Next
+        </button>
       </div>
     </div>
   );
-}
+};
 
-// example bodyRows
-// <tr className="border-b transition duration-300 ease-in-out hover:bg-neutral-100 dark:border-neutral-500 dark:hover:bg-neutral-600">
-//   <td className="whitespace-nowrap px-6 py-4 font-medium">1</td>
-//   <td className="whitespace-nowrap px-6 py-4">Mark</td>
-//   <td className="whitespace-nowrap px-6 py-4">Otto</td>
-//   <td className="whitespace-nowrap px-6 py-4">@mdo</td>
-// </tr>;
-
-// Example Header Rows
-// <tr onClick={handleClick}>
-//   <th scope="col" className="px-6 py-4">
-//     #
-//   </th>
-//   <th scope="col" className="px-6 py-4">
-//     First
-//   </th>
-//   <th scope="col" className="px-6 py-4">
-//     Last
-//   </th>
-//   <th scope="col" className="px-6 py-4">
-//     Handle
-//   </th>
-// </tr>
+export default GenericTable;
