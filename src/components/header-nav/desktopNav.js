@@ -7,7 +7,7 @@ export default function DesktopNav() {
 
   const navList = [
     { to: "/dashboard", title: "Dashboard" },
-    { to: "/checkout-dashboard", title: "Check In / Out" },
+    { to: "/order-dashboard", title: "Order" },
     { to: "/styles", title: "Styles" },
     { to: "/", title: "Login" },
   ];
@@ -22,7 +22,10 @@ export default function DesktopNav() {
             <NavLink
               key={s.to}
               to={s.to}
-              className="hover:underline hover:weight-700 my-2 hover:bg-green p-4 w-full text-center hover:cursor-pointer"
+              className="shadow-sm hover:shadow-lg transition duration-300 ease-in-out underline weight-700 my-2 bg-green p-4 w-full text-center cursor-pointer"
+              style={{
+                borderRadius: 10,
+              }}
             >
               {s.title}
             </NavLink>

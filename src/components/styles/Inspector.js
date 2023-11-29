@@ -5,7 +5,7 @@ import { serverEndpointSwitch } from "../../utils/common";
 import { useStylesContext } from "../../contexts/StylesContext";
 
 const Inspector = ({}) => {
-  const [checkouts, setCheckouts] = useState([]);
+  const [orders, setOrders] = useState([]);
   const [qrCodes, setQrCodes] = useState([]);
 
   const { styles, selectStyle, selectedStyle } = useStylesContext();
@@ -73,7 +73,7 @@ const Inspector = ({}) => {
           </tbody>
         </table>
       )}
-      {/* {checkouts.length && (
+      {/* {orders.length && (
         <table>
           <thead>
             <tr>
@@ -82,7 +82,7 @@ const Inspector = ({}) => {
             </tr>
           </thead>
           <tbody>
-            {checkouts.map((qrCode) => (
+            {orders.map((qrCode) => (
               <tr key={qrCode.id}>
                 <td>{qrCode.id}</td>
                 <td>{qrCode.style_id}</td>

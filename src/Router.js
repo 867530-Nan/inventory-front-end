@@ -14,17 +14,16 @@ import Logout from "./components/Logout";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Styles from "./components/styles";
-import Dashboard from "./components/Dashboard";
 import Contact from "./components/Contact";
 import NotFound from "./components/NotFound";
 import PrivateRoute from "./components/PrivateRoute";
 import ForgotPassword from "./components/ForgotPassword";
 import UpdateProfile from "./components/UpdateProfile";
-import MobileScanner from "./components/MobileScanner";
+
 import MobileNav from "./components/header-nav/mobileNav";
 import DesktopNav from "./components/header-nav/desktopNav";
 import TabletNav from "./components/header-nav/tabletNav";
-import CheckoutDashboard from "./components/CheckoutDashboard";
+import OrderDashboard from "./components/OrderDashboard";
 
 const Router = () => {
   const { currentUser } = auth;
@@ -37,12 +36,6 @@ const Router = () => {
 
   console.log("your time", currentUser);
 
-  const determineHome = () => {
-    if (isNotMobile) return <Dashboard />;
-    if (isMobile || isTablet) return <MobileScanner />;
-    return <Dashboard />;
-  };
-
   return (
     <BrowserRouter>
       <div className="flex h-100vh overflow-hidden">
@@ -54,29 +47,18 @@ const Router = () => {
           <Routes>
             {/* <PrivateRoute path="new-style/*" element={<NewStyle />} />
           <PrivateRoute path="update-profile/" element={<UpdateProfile />} /> */}
-            {/* <PrivateRoute path="mobile-scanner/" element={<MobileScanner />} /> */}
             <Route
-              path="/checkout-dashboard"
+              path="/order-dashboard"
               element={
-                currentUser ? (
-                  <CheckoutDashboard />
-                ) : (
-                  <Navigate replace to="/" />
-                )
+                currentUser ? <OrderDashboard /> : <Navigate replace to="/" />
               }
             />
             <Route
               path="styles/*"
               element={currentUser ? <Styles /> : <Navigate replace to="/" />}
             />
-            <Route
-              path="dashboard/*"
-              element={
-                currentUser ? <Dashboard /> : <Navigate replace to="/" />
-              }
-            />
             <Route exact path="/" element={<Login />} />
-            <Route exact path="/home" element={determineHome()} />
+            <Route exact path="/home" element={<OrderDashboard />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/login" element={<Login />} />

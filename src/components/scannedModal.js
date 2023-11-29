@@ -16,8 +16,8 @@ export default function ScannedModal({
   setShowModal,
   infoObj,
   onCheckInClick,
-  onCheckoutClick,
-  disableCheckout,
+  onOrderClick,
+  disableOrder,
   customerEmail,
   setCustomerEmail,
   handleModalClose,
@@ -48,11 +48,11 @@ export default function ScannedModal({
     return divs;
   }
 
-  const handleOnCheckOut = () => {
+  const handleOnOrder = () => {
     if (!customerEmail) {
       setError("Email required for check-out");
       return;
-    } else onCheckoutClick();
+    } else onOrderClick();
   };
   console.log("chips", customerEmail);
   return (
@@ -113,28 +113,28 @@ export default function ScannedModal({
                   <button
                     type="button"
                     className={`${
-                      disableCheckout
+                      disableOrder
                         ? ""
                         : "hover:bg-primary-accent-100 transition focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200"
                     } inline-block rounded bg-green-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 duration-150 ease-in-out`}
-                    onClick={handleOnCheckOut}
-                    disabled={disableCheckout}
+                    onClick={handleOnOrder}
+                    disabled={disableOrder}
                   >
-                    Check-Out
+                    Order-Out
                   </button>
                 </TERipple>
                 <TERipple rippleColor="light">
                   <button
                     type="button"
                     className={`${
-                      disableCheckout
+                      disableOrder
                         ? "hover:bg-primary-accent-100 transition focus:bg-primary-accent-100 focus:outline-none focus:ring-0 active:bg-primary-accent-200"
                         : ""
                     } inline-block rounded bg-green-100 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal text-primary-700 duration-150 ease-in-out`}
                     onClick={() => onCheckInClick()}
-                    disabled={!disableCheckout}
+                    disabled={!disableOrder}
                   >
-                    Check-In
+                    Order-In
                   </button>
                 </TERipple>
               </div>
