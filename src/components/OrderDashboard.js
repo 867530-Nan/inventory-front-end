@@ -5,6 +5,7 @@ import axios from "axios";
 import { serverEndpointSwitch } from "../utils/common";
 import QRScanner from "./QRScanner";
 import QRCodeManager from "./QRCodeManager";
+import { useQRCodesManager } from "../contexts/QRCodesContext";
 
 const SampleForm = ({}) => {
   const [customerName, setCustomerName] = useState("");
@@ -17,6 +18,7 @@ const SampleForm = ({}) => {
   const [sampleId, setSampleId] = useState("");
 
   const [isModalOpen, setModalOpen] = useState(false);
+  const { stylesByQRArray } = useQRCodesManager();
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
@@ -40,26 +42,6 @@ const SampleForm = ({}) => {
     // setCustomerOptions(matchingCustomers);
   };
 
-  const handleScan = (decodedText, decodedResult) => {
-    setIsSampleIdMode(true);
-    // axios
-    //   .get(
-    //     `${serverEndpointSwitch}/api/v1/qr-singles/${decodedText}/style-and-orders`,
-    //   )
-    //   .then((response) => {
-    //     console.log("styyles orders", response);
-    //     // setScannedStyle(response.data.style[0]);
-    //     // setShowInfoModal(true);
-    //     // setFoundOrder(response.data.orders);
-    //   })
-    //   .catch((error) => {
-    //     console.error("POST request failed:", error);
-    //   })
-    //   .finally(() => {
-    //     setIsSampleIdMode(true);
-    //   });
-  };
-
   const handleCustomerSelect = (customer) => {
     const { name, address, phone_number, email } = customer;
     setCustomerName(name);
@@ -70,15 +52,8 @@ const SampleForm = ({}) => {
     setCustomerOptions([]);
   };
 
-  const handleSampleIdChange = (e) => {
-    setSampleId(e.target.value);
-  };
-
-  const toggleSampleMode = () => {
-    setIsSampleIdMode(!isSampleIdMode);
-  };
-
   const handleSubmit = (e) => {
+    console.log(stylesByQRArray);
     e.preventDefault();
     console.log("Submitted:", {
       customer: {
@@ -87,9 +62,10 @@ const SampleForm = ({}) => {
         phoneNumber: customerPhoneNumber,
         email: customerEmail,
       },
-      sampleId,
+      qr_codes: stylesByQRArray.map((q) => q.id),
     });
   };
+
   return (
     <div className="sample-form-container">
       <h2>New Order</h2>
@@ -117,18 +93,19 @@ const SampleForm = ({}) => {
 
           <label>
             Customer Address:
-            {/* <input
-            type="text"
-            value={customerAddress}
-            onChange={(e) => setCustomerAddress(e.target.value)}
-          /> */}
-            <Autocomplete
+            <input
+              type="text"
+              value={customerAddress}
+              placeholder="Address"
+              onChange={(e) => setCustomerAddress(e.target.value)}
+            />
+            {/* <Autocomplete
               apiKey="AIzaSyBZYDN1laILCfG1zbm6ImoK3dtzFGQDFMc"
               value={customerAddress}
               onPlaceSelected={(place) => {
                 setCustomerAddress(place.formatted_address);
               }}
-            />
+            /> */}
           </label>
 
           <label>
@@ -153,11 +130,12 @@ const SampleForm = ({}) => {
           <div>
             <h2 className="mt-2">Sample Manager</h2>
             <div className="mt-2">
-              <QRCodeManager onClose={toggleModal} />
+              <QRCodeManager />
             </div>
           </div>
-
-          <button type="submit">Submit</button>
+          <div className="mt-3">
+            <button type="submit">Submit</button>
+          </div>
         </form>
       </div>
     </div>

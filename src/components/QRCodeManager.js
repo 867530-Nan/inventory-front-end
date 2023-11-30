@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { useOrders } from "../contexts/OrdersContext"; // Replace with the actual path to your ordersContext
 import QRScanner from "./QRScanner";
+import { useQRCodesManager } from "../contexts/QRCodesContext";
 
 const QRCodeManager = () => {
-  const { orders, createOrder } = useOrders();
   const [qrCodeInput, setQRCodeInput] = useState("");
   const [scannedQRCode, setScannedQRCode] = useState("");
   const [isQRCodeManagerVisible, setQRCodeManagerVisibility] = useState("");
+  const { addQRCode, stylesByQRArray } = useQRCodesManager();
 
   const handleInputChange = (event) => {
     setQRCodeInput(event.target.value);
@@ -14,14 +14,16 @@ const QRCodeManager = () => {
 
   const handleSaveQRCode = () => {
     if (qrCodeInput.trim() !== "") {
-      createOrder({ qr_code: qrCodeInput });
+      addQRCode(qrCodeInput);
       setQRCodeInput("");
     }
   };
 
   const handleScanQRCode = (scannedCode) => {
+    addQRCode(scannedCode);
     setScannedQRCode(scannedCode);
-    createOrder({ qr_code: scannedCode });
+    setQRCodeManagerVisibility(false);
+    // createOrder({ qr_code: scannedCode });
   };
 
   const toggleQRCodeManager = () => {
@@ -31,53 +33,61 @@ const QRCodeManager = () => {
   return (
     <div>
       {/* Single-Input Form */}
-      <div>
-        <label>
+      <div className="flex items-center justify-center align-middle">
+        <label className="mr-2">
           Enter QR Code:
-          <input type="text" value={qrCodeInput} onChange={handleInputChange} />
+          <input
+            type="text"
+            value={qrCodeInput}
+            onChange={handleInputChange}
+            className="py-2 px-3 border border-gray-300 rounded-md"
+          />
         </label>
-        <button onClick={handleSaveQRCode}>Add</button>
+        <button
+          className="mt-2.5 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          onClick={handleSaveQRCode}
+        >
+          Add
+        </button>
       </div>
 
       {/* QR Scanner */}
       <div>
-        <button onClick={toggleQRCodeManager}>
-          {!isQRCodeManagerVisible ? "Scan QR Code" : ""}
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={toggleQRCodeManager}
+        >
+          {!isQRCodeManagerVisible ? "Scan QR Code" : "Close"}
         </button>
         {/* Assuming you have a QRScanner component that takes handleScanQRCode as a prop */}
         <QRScanner
           onNewScanResult={handleScanQRCode}
-          scanning={!isQRCodeManagerVisible}
+          scanning={isQRCodeManagerVisible}
         />
         {scannedQRCode && <p>Scanned QR Code: {scannedQRCode}</p>}
       </div>
 
       {/* Table for Displaying QR Codes */}
       <div>
-        <h3>Collected QR Codes</h3>
+        <h3 className="my-3">Scanned Samples</h3>
         <table>
           <thead>
             <tr>
-              <th>QR Code</th>
+              <th>Style</th>
+              <th>Color</th>
+              <th>ID</th>
             </tr>
           </thead>
           <tbody>
-            {orders.map((order) => (
+            {stylesByQRArray.map((order) => (
               <tr key={order.id}>
+                <td>{order.name} |</td>
+                <td>{order.color} |</td>
                 <td>{order.qr_code}</td>
               </tr>
             ))}
           </tbody>
         </table>
-      </div>
-
-      {/* Save and Close Buttons */}
-      <div>
-        <button onClick={handleSaveQRCode}>Save</button>
-        {/* You might want to implement a function for closing, depending on your requirements */}
-        <button onClick={() => console.log("Close button clicked")}>
-          Close
-        </button>
       </div>
     </div>
   );
