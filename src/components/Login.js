@@ -13,17 +13,12 @@ export default function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(
-      "handle submit",
-      await login(emailRef.current.value, passwordRef.current.value),
-    );
     try {
       setError("");
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
       navigate("/home");
     } catch (err) {
-      console.log("the thing failed", err);
       setError("Failed to log in", err);
     }
 

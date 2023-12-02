@@ -19,7 +19,6 @@ const Inspector = ({}) => {
             `${serverEndpointSwitch}/api/v1/styles/get-style-info-by-name`,
             { name: selectedStyle[0].name },
           );
-          console.log("the response");
         } catch (error) {
           console.error("Error fetching QR codes:", error);
         }

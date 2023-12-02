@@ -34,8 +34,6 @@ const Router = () => {
 
   const isTablet = useMediaQuery({ query: "(max-width: 1224px)" });
 
-  console.log("your time", currentUser);
-
   return (
     <BrowserRouter>
       <div className="flex h-100vh overflow-hidden">

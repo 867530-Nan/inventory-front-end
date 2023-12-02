@@ -54,7 +54,6 @@ export default function ScannedModal({
       return;
     } else onOrderClick();
   };
-  console.log("chips", customerEmail);
   return (
     <div>
       <TEModal

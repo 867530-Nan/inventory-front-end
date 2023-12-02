@@ -18,12 +18,10 @@ function Home() {
       axios
         .get(`${serverEndpointSwitch}/api/v1/qr-singles/${decodedText}`)
         .then((response) => {
-          console.log("POST request successful:", response.data[0]);
           setText(response.data[0]);
           setScanning(false);
         })
         .catch((error) => {
-          console.error("POST request failed:", error);
           setScanning(false);
         })
         .finally(() => {
@@ -32,7 +30,6 @@ function Home() {
     } else setText("no decode");
     if (decodedResult) {
       setRes(decodedResult);
-      console.log("resresresres", decodedResult);
     } else setRes("no bueno my guy");
   };
 
@@ -43,8 +40,6 @@ function Home() {
     }
     return info;
   };
-
-  console.log("the always", text);
 
   return (
     <div className="App">
@@ -87,7 +82,6 @@ export default Home;
 //   };
 
 //   const handleError = (error) => {
-//     console.error(error);
 //     // Handle the error as needed
 //     setScanning(false); // Close the scanner
 //     // You can also trigger a callback on failure if desired

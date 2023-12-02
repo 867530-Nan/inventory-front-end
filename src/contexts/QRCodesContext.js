@@ -16,7 +16,6 @@ export const QRCodesManagerProvider = ({ children }) => {
     if (stylesByQR[newQRCode]) {
       delete stylesByQR[newQRCode];
     } else {
-      console.log("");
       axios
         .get(
           `${serverEndpointSwitch}/api/v1/qr-singles/${newQRCode}/style-by-qr`,
@@ -28,7 +27,7 @@ export const QRCodesManagerProvider = ({ children }) => {
 
   // Create a new QR code
   const addQRCode = (newQRCode) => {
-    setQRCodes((prevQRCodes) => [...prevQRCodes, newQRCode]);
+    setQRCodes((prevQRCodes) => [...prevQRCodes, parseInt(newQRCode)]);
     updateStylesByQR(newQRCode);
   };
 
@@ -40,10 +39,12 @@ export const QRCodesManagerProvider = ({ children }) => {
   };
 
   // Delete a QR code
-  const deleteQRCode = (id) => {
-    setQRCodes((prevQRCodes) =>
-      prevQRCodes.filter((qrCode) => qrCode.id !== id),
-    );
+  const deleteQRCode = (qr) => {
+    console.log("delete the qr", qr);
+    setQRCodes((prevQRCodes) => {
+      return prevQRCodes.filter((qrCode) => qrCode !== qr);
+    });
+    updateStylesByQR(qr);
   };
 
   // Read: Get all QR codes

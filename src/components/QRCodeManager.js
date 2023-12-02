@@ -6,7 +6,7 @@ const QRCodeManager = () => {
   const [qrCodeInput, setQRCodeInput] = useState("");
   const [scannedQRCode, setScannedQRCode] = useState("");
   const [isQRCodeManagerVisible, setQRCodeManagerVisibility] = useState("");
-  const { addQRCode, stylesByQRArray } = useQRCodesManager();
+  const { addQRCode, stylesByQRArray, deleteQRCode } = useQRCodesManager();
 
   const handleInputChange = (event) => {
     setQRCodeInput(event.target.value);
@@ -26,10 +26,13 @@ const QRCodeManager = () => {
     // createOrder({ qr_code: scannedCode });
   };
 
+  const handleDelete = (qr) => {
+    deleteQRCode(qr);
+  };
+
   const toggleQRCodeManager = () => {
     setQRCodeManagerVisibility(!isQRCodeManagerVisible);
   };
-
   return (
     <div>
       {/* Single-Input Form */}
@@ -70,20 +73,29 @@ const QRCodeManager = () => {
       {/* Table for Displaying QR Codes */}
       <div>
         <h3 className="my-3">Scanned Samples</h3>
-        <table>
+        <table style={{ width: "100%", tableLayout: "fixed" }}>
           <thead>
             <tr>
               <th>Style</th>
               <th>Color</th>
               <th>ID</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
             {stylesByQRArray.map((order) => (
               <tr key={order.id}>
-                <td>{order.name} |</td>
-                <td>{order.color} |</td>
+                <td>{order.name} </td>
+                <td>{order.color} </td>
                 <td>{order.qr_code}</td>
+                <td>
+                  <button
+                    type="button"
+                    onClick={() => handleDelete(order.qr_code)}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>

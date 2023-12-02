@@ -6,6 +6,7 @@ import { serverEndpointSwitch } from "../utils/common";
 import QRScanner from "./QRScanner";
 import QRCodeManager from "./QRCodeManager";
 import { useQRCodesManager } from "../contexts/QRCodesContext";
+import { useOrders } from "../contexts/OrdersContext";
 
 const SampleForm = ({}) => {
   const [customerName, setCustomerName] = useState("");
@@ -14,11 +15,10 @@ const SampleForm = ({}) => {
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerOptions, setCustomerOptions] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [isSampleIdMode, setIsSampleIdMode] = useState(true);
-  const [sampleId, setSampleId] = useState("");
 
   const [isModalOpen, setModalOpen] = useState(false);
   const { stylesByQRArray } = useQRCodesManager();
+  const { createOrder } = useOrders();
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
@@ -53,16 +53,15 @@ const SampleForm = ({}) => {
   };
 
   const handleSubmit = (e) => {
-    console.log(stylesByQRArray);
     e.preventDefault();
-    console.log("Submitted:", {
+    createOrder({
       customer: {
         name: customerName,
         address: customerAddress,
         phoneNumber: customerPhoneNumber,
         email: customerEmail,
       },
-      qr_codes: stylesByQRArray.map((q) => q.id),
+      qr_code_ids: Object.values(stylesByQRArray).map((s) => s.id),
     });
   };
 

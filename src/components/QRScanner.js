@@ -44,21 +44,17 @@ const QRScanner = ({ scanning, onNewScanResult }) => {
   //           `${serverEndpointSwitch}/api/v1/qr-singles/${decodedText}/style-and-orders`,
   //         )
   //         .then((response) => {
-  //           console.log("styyles orders", response);
   //           setScannedStyle(response.data.style[0]);
   //           setShowInfoModal(true);
   //           setFoundOrder(response.data.orders);
   //         })
   //         .catch((error) => {
-  //           console.error("POST request failed:", error);
   //         })
   //         .finally(() => {
   //           setScanning(false);
   //         });
   //     }
   //   };
-
-  //   console.log("setFoundOrder", foundOrder);
 
   //   const onOrder = () => {
   //     setScannedStyle(undefined);
@@ -73,11 +69,9 @@ const QRScanner = ({ scanning, onNewScanResult }) => {
   //     axios
   //       .post(`${serverEndpointSwitch}/api/v1/orders`, orerData)
   //       .then((res) => {
-  //         console.log("order successful", res);
   //         setSuccessfullOrder(true);
   //       })
   //       .catch((err) => {
-  //         console.log("new order err", err);
   //       })
   //       .finally(() => {
   //         handleModalClose();
@@ -97,7 +91,6 @@ const QRScanner = ({ scanning, onNewScanResult }) => {
   //         setSuccessfulCheckin(true);
   //       })
   //       .catch((err) => {
-  //         console.error("new order err", err);
   //       })
   //       .finally(() => {
   //         handleModalClose();
