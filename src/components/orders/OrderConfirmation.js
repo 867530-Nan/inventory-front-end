@@ -1,23 +1,48 @@
 import React from "react";
-import { useOrders } from "../contexts/OrdersContext"; // Replace with your actual context file
-
+import { useOrders } from "../../contexts/OrdersContext"; // Replace with your actual context file
+import { generatePDF } from "../../utils/generatePDF";
+import moment from "moment";
 const OrderConfirmation = () => {
   const { completedOrder } = useOrders();
+
+  const businessInfo = {
+    name: "A-Z Flooring",
+    address: "5 Gordon Place, Newtown, Wellington 6021",
+    hours: `
+      Sunday    Closed
+      Monday    9 am–5 pm
+      Tuesday   9 am–5 pm
+      Wednesday 9 am–5 pm
+      Thursday  9 am–5 pm
+      Friday    9 am–5 pm
+      Saturday  10 am–1 pm
+    `,
+  };
+
+  const handlePrint = () => {
+    const pdfDoc = generatePDF(completedOrder, businessInfo);
+    pdfDoc.save("order_confirmation.pdf");
+  };
+
+  const handleEmail = () => {
+    const pdfDoc = generatePDF(completedOrder, businessInfo);
+    const pdfDataUri = pdfDoc.output("datauristring");
+
+    // Create a mailto link with the PDF attached
+    const mailtoLink = `mailto:${
+      completedOrder.customer.email
+    }?subject=Order Confirmation&body=Attached is your order confirmation.&attachment=${encodeURIComponent(
+      pdfDataUri,
+    )}`;
+
+    // Open the default email client
+    window.location.href = mailtoLink;
+  };
 
   if (!completedOrder) {
     // If no completed order is available, you might want to handle this case
     return <div>No order details available.</div>;
   }
-
-  const handlePrint = () => {
-    // Logic for printing PDF
-    console.log("Printing PDF");
-  };
-
-  const handleEmail = () => {
-    // Logic for emailing PDF
-    console.log("Emailing PDF");
-  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -28,7 +53,7 @@ const OrderConfirmation = () => {
         </h2>
         <p>
           <span className="font-semibold">Checkout Date:</span>{" "}
-          {completedOrder.order.checkout_date}
+          {moment(completedOrder.order.checkout_date).format("MMMM Do YYYY")}
         </p>
 
         {/* Customer Information */}

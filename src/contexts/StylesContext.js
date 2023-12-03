@@ -61,7 +61,7 @@ const StylesProvider = ({ children }) => {
     }
   };
 
-  const selectStyle = (passedStyle) => {
+  const onSelectStyle = (passedStyle) => {
     const style = styles.filter((s) => s.name === passedStyle.name);
     setSelectedStyle(style);
   };
@@ -78,13 +78,29 @@ const StylesProvider = ({ children }) => {
     );
   };
 
+  function getUniqueNames() {
+    // Use Set to store unique names
+    const uniqueNamesSet = new Set();
+
+    // Iterate through the list and add names to the Set
+    styles.forEach((item) => {
+      uniqueNamesSet.add(item.name);
+    });
+
+    // Convert Set back to an array for the final result
+    const uniqueNamesArray = Array.from(uniqueNamesSet);
+
+    return uniqueNamesArray;
+  }
+
   return (
     <StylesContext.Provider
       value={{
+        uniqueStylesArray: getUniqueNames(),
         styles,
         addStyle,
         selectedStyle,
-        selectStyle,
+        onSelectStyle,
         uniqueStyleNamesWithColors,
         filterStylesByName,
         filterStylesByColor,

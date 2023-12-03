@@ -1,153 +1,118 @@
-// ordersContext.js
-
-import React, { createContext, useReducer, useContext } from "react";
+import React, { createContext, useContext, useState } from "react";
 import axios from "axios";
 import { serverEndpointSwitch } from "../utils/common";
 
 // Context
 const OrdersContext = createContext();
 
-// Initial State
-const initialState = {
-  orders: [],
-  error: null,
-  loading: false,
-  completedOrder: {
-    customer: {
-      id: 74,
-      name: "4 Gumbo",
-      email: "4.gumbo@gmail.com",
-      address: "4 Drive",
-      phone_number: "444 444 1234",
-    },
-    order: {
-      id: 74,
-      checkout_date: "2023-12-02 21:40:42.771183-07",
-      checkin_date: null,
-      customer_id: 74,
-    },
-    codesAndStyles: [
-      {
-        id: 13759,
-        name: "Amore",
-        color: "Crema",
-        price: null,
-        inventory: 2,
-        style_id: 66,
-        qr_code: 114249,
-      },
-    ],
-  },
-};
-
-// Reducer
-const ordersReducer = (state, action) => {
-  switch (action.type) {
-    case "FETCH_ORDERS_REQUEST":
-    case "CREATE_ORDER_REQUEST":
-    case "UPDATE_ORDER_REQUEST":
-    case "DELETE_ORDER_REQUEST":
-      return { ...state, loading: true, error: null };
-
-    case "FETCH_ORDERS_SUCCESS":
-      return { ...state, orders: action.payload, loading: false };
-
-    case "CREATE_ORDER_SUCCESS":
-    case "UPDATE_ORDER_SUCCESS":
-      return { ...state, loading: false };
-
-    case "DELETE_ORDER_SUCCESS":
-      return {
-        ...state,
-        orders: state.orders.filter((order) => order.id !== action.payload),
-        loading: false,
-      };
-
-    case "FETCH_ORDERS_FAILURE":
-    case "CREATE_ORDER_FAILURE":
-    case "UPDATE_ORDER_FAILURE":
-    case "DELETE_ORDER_FAILURE":
-      return { ...state, loading: false, error: action.payload };
-
-    case "COMPLETED_ORDER":
-      return { ...state, completedOrder: action.completedOrder };
-
-    default:
-      return state;
-  }
-};
-
-// Actions
-const fetchOrders = async (dispatch) => {
-  try {
-    dispatch({ type: "FETCH_ORDERS_REQUEST" });
-    const response = await axios.get(`${serverEndpointSwitch}/api/v1/orders`);
-    dispatch({ type: "FETCH_ORDERS_SUCCESS", payload: response.data });
-  } catch (error) {
-    dispatch({ type: "FETCH_ORDERS_FAILURE", payload: error.message });
-  }
-};
-
-const onCompletedOrder = async (dispatch, completedOrder) => {
-  try {
-    dispatch({ type: "COMPLETED_ORDER", completedOrder });
-  } catch (error) {
-    dispatch({ type: "INCOMPLETE_ORDER" });
-  }
-};
-
-const createOrder = async (dispatch, orderData) => {
-  try {
-    dispatch({ type: "CREATE_ORDER_REQUEST" });
-    return await axios.post(`${serverEndpointSwitch}/api/v1/orders`, orderData);
-  } catch (error) {
-    dispatch({ type: "CREATE_ORDER_FAILURE", payload: error.message });
-  }
-};
-
-const updateOrder = async (dispatch, orderId, orderData) => {
-  try {
-    dispatch({ type: "UPDATE_ORDER_REQUEST" });
-    await axios.put(
-      `${serverEndpointSwitch}/api/v1/orders/${orderId}`,
-      orderData,
-    );
-    dispatch({ type: "UPDATE_ORDER_SUCCESS" });
-  } catch (error) {
-    dispatch({ type: "UPDATE_ORDER_FAILURE", payload: error.message });
-  }
-};
-
-const deleteOrder = async (dispatch, orderId) => {
-  try {
-    dispatch({ type: "DELETE_ORDER_REQUEST" });
-    await axios.delete(`${serverEndpointSwitch}/api/v1/orders/${orderId}`);
-    dispatch({ type: "DELETE_ORDER_SUCCESS", payload: orderId });
-  } catch (error) {
-    dispatch({ type: "DELETE_ORDER_FAILURE", payload: error.message });
-  }
-};
+// {
+//   "order_id": 29,
+//   "checkout_date": "2023-12-01 20:06:28.046498-07",
+//   "checkin_date": null,
+//   "customer_id": 43,
+//   "customer_name": "3 Gumbo",
+//   "customer_email": "3.gumbo@gmail.com",
+//   "customer_address": "3 Drive",
+//   "customer_phone_number": "021 038 6301",
+//   "qr_code_id": 13617,
+//   "qr_code": 112990,
+//   "style_id": 1,
+//   "style_name": "8th Wonder",
+//   "style_color": "0280 Whakarewarewa"
+// }
 
 // Context Provider
 const OrdersProvider = ({ children }) => {
-  const [state, dispatch] = useReducer(ordersReducer, initialState);
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [completedOrder, setCompletedOrder] = useState({});
+
+  // Actions
+  const fetchOrders = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`${serverEndpointSwitch}/api/v1/orders`);
+      setOrders(response.data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const onCompletedOrder = (completedOrder) => {
+    setCompletedOrder(completedOrder);
+  };
+
+  const createOrder = async (orderData) => {
+    try {
+      setLoading(true);
+      await axios.post(`${serverEndpointSwitch}/api/v1/orders`, orderData);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateOrder = async (orderId, orderData) => {
+    try {
+      setLoading(true);
+      await axios.put(
+        `${serverEndpointSwitch}/api/v1/orders/${orderId}`,
+        orderData,
+      );
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const deleteOrder = async (orderId) => {
+    try {
+      setLoading(true);
+      await axios.delete(`${serverEndpointSwitch}/api/v1/orders/${orderId}`);
+      setOrders((prevOrders) =>
+        prevOrders.filter((order) => order.id !== orderId),
+      );
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filterOrdersByName = (nameFilter) => {
+    return orders.filter((order) =>
+      order.customer_name.toLowerCase().includes(nameFilter.toLowerCase()),
+    );
+  };
+
+  const filterOrdersByEmail = (emailFilter) => {
+    return orders.filter((order) =>
+      order.customer_email.toLowerCase().includes(emailFilter.toLowerCase()),
+    );
+  };
+
+  // Context values
+  const contextValues = {
+    orders,
+    loading,
+    error,
+    filterOrdersByEmail,
+    filterOrdersByName,
+    fetchOrders,
+    createOrder,
+    updateOrder,
+    deleteOrder,
+    onCompletedOrder,
+    completedOrder,
+  };
 
   return (
-    <OrdersContext.Provider
-      value={{
-        orders: state.orders,
-        loading: state.loading,
-        error: state.error,
-        fetchOrders: () => fetchOrders(dispatch),
-        createOrder: (orderData) => createOrder(dispatch, orderData),
-        updateOrder: (orderId, orderData) =>
-          updateOrder(dispatch, orderId, orderData),
-        deleteOrder: (orderId) => deleteOrder(dispatch, orderId),
-        onCompletedOrder: (completedOrder) =>
-          onCompletedOrder(dispatch, completedOrder),
-        completedOrder: state.completedOrder,
-      }}
-    >
+    <OrdersContext.Provider value={contextValues}>
       {children}
     </OrdersContext.Provider>
   );

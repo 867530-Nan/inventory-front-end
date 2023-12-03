@@ -14,17 +14,18 @@ import Logout from "./components/Logout";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Styles from "./components/styles";
+import OrderManager from "./components/orders";
 import Contact from "./components/Contact";
 import NotFound from "./components/NotFound";
 import PrivateRoute from "./components/PrivateRoute";
 import ForgotPassword from "./components/ForgotPassword";
 import UpdateProfile from "./components/UpdateProfile";
-import OrderConfirmation from "./components/OrderConfirmation";
+import OrderConfirmation from "./components/orders/OrderConfirmation";
 
 import MobileNav from "./components/header-nav/mobileNav";
 import DesktopNav from "./components/header-nav/desktopNav";
 import TabletNav from "./components/header-nav/tabletNav";
-import OrderDashboard from "./components/OrderDashboard";
+import NewOrderForm from "./components/orders/NewOrderForm";
 
 const Router = () => {
   const { currentUser } = auth;
@@ -49,7 +50,7 @@ const Router = () => {
             <Route
               path="/order-manager"
               element={
-                currentUser ? <OrderDashboard /> : <Navigate replace to="/" />
+                currentUser ? <OrderManager /> : <Navigate replace to="/" />
               }
             />
             <Route
@@ -57,7 +58,7 @@ const Router = () => {
               element={currentUser ? <Styles /> : <Navigate replace to="/" />}
             />
             <Route exact path="/" element={<Login />} />
-            <Route exact path="/home" element={<OrderDashboard />} />
+            {/* <Route exact path="/home" element={<NewOrderForm />} /> */}
             <Route path="/signup" element={<Signup />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/login" element={<Login />} />

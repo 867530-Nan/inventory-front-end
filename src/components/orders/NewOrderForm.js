@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { redirect, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./styles/OrderDashboard.css";
+import "./NewOrderForm.css";
 import Autocomplete from "react-google-autocomplete";
-import { serverEndpointSwitch } from "../utils/common";
-import QRCodeManager from "./QRCodeManager";
-import { useQRCodesManager } from "../contexts/QRCodesContext";
-import { useOrders } from "../contexts/OrdersContext";
+import { serverEndpointSwitch } from "../../utils/common";
+import QRCodeManager from "../QRCodeManager";
+import { useQRCodesManager } from "../../contexts/QRCodesContext";
+import { useOrders } from "../../contexts/OrdersContext";
 
-const SampleForm = ({}) => {
+const NewOrderForm = ({}) => {
   const [customerName, setCustomerName] = useState("");
   const [customerAddress, setCustomerAddress] = useState("");
   const [customerPhoneNumber, setCustomerPhoneNumber] = useState("");
@@ -170,4 +170,4 @@ const SampleForm = ({}) => {
   );
 };
 
-export default SampleForm;
+export default NewOrderForm;
