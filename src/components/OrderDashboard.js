@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { redirect, useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./styles/OrderDashboard.css";
 import Autocomplete from "react-google-autocomplete";
-import axios from "axios";
 import { serverEndpointSwitch } from "../utils/common";
-import QRScanner from "./QRScanner";
 import QRCodeManager from "./QRCodeManager";
 import { useQRCodesManager } from "../contexts/QRCodesContext";
 import { useOrders } from "../contexts/OrdersContext";
@@ -15,19 +15,27 @@ const SampleForm = ({}) => {
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerOptions, setCustomerOptions] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
+  const navigate = useNavigate();
+  // ...
 
   const [isModalOpen, setModalOpen] = useState(false);
   const { stylesByQRArray } = useQRCodesManager();
-  const { createOrder } = useOrders();
+  const { createOrder, onCompletedOrder, completedOrder } = useOrders();
 
   const toggleModal = () => {
     setModalOpen(!isModalOpen);
   };
 
+  useEffect(() => {
+    if (completedOrder?.order?.id) {
+      console.log("completedOrder.order.id: ", completedOrder.order.id);
+      navigate("/order-confirmation");
+    }
+  }, [completedOrder]);
+
   const handleCustomerNameChange = async (e) => {
     const inputValue = e.target.value;
     setCustomerName(inputValue);
-    console.log('does this help"???', inputValue);
     await axios
       .post(`${serverEndpointSwitch}/api/v1/customers/like-search`, {
         searchString: inputValue,
@@ -53,7 +61,7 @@ const SampleForm = ({}) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
+    console.log("handle submit");
     createOrder({
       customer: {
         name: customerName,
@@ -62,7 +70,21 @@ const SampleForm = ({}) => {
         email: customerEmail,
       },
       qr_code_ids: Object.values(stylesByQRArray).map((s) => s.id),
-    });
+    })
+      .then((res) => {
+        console.log("great success: ", res.data);
+        onCompletedOrder(res.data);
+        return redirect("/order-confirmation");
+      })
+      .catch((e) => console.error("could not create order, sorry man"));
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      // Trigger the click event
+      document.getElementById("submitButton").click();
+    }
   };
 
   return (
@@ -133,7 +155,14 @@ const SampleForm = ({}) => {
             </div>
           </div>
           <div className="mt-3">
-            <button type="submit">Submit</button>
+            <button
+              type="button"
+              id="submitButton"
+              onClick={() => handleSubmit()}
+              onKeyUp={handleKeyPress}
+            >
+              Submit
+            </button>
           </div>
         </form>
       </div>

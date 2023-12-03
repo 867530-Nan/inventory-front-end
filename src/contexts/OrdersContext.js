@@ -12,6 +12,32 @@ const initialState = {
   orders: [],
   error: null,
   loading: false,
+  completedOrder: {
+    customer: {
+      id: 74,
+      name: "4 Gumbo",
+      email: "4.gumbo@gmail.com",
+      address: "4 Drive",
+      phone_number: "444 444 1234",
+    },
+    order: {
+      id: 74,
+      checkout_date: "2023-12-02 21:40:42.771183-07",
+      checkin_date: null,
+      customer_id: 74,
+    },
+    codesAndStyles: [
+      {
+        id: 13759,
+        name: "Amore",
+        color: "Crema",
+        price: null,
+        inventory: 2,
+        style_id: 66,
+        qr_code: 114249,
+      },
+    ],
+  },
 };
 
 // Reducer
@@ -43,6 +69,9 @@ const ordersReducer = (state, action) => {
     case "DELETE_ORDER_FAILURE":
       return { ...state, loading: false, error: action.payload };
 
+    case "COMPLETED_ORDER":
+      return { ...state, completedOrder: action.completedOrder };
+
     default:
       return state;
   }
@@ -59,11 +88,18 @@ const fetchOrders = async (dispatch) => {
   }
 };
 
+const onCompletedOrder = async (dispatch, completedOrder) => {
+  try {
+    dispatch({ type: "COMPLETED_ORDER", completedOrder });
+  } catch (error) {
+    dispatch({ type: "INCOMPLETE_ORDER" });
+  }
+};
+
 const createOrder = async (dispatch, orderData) => {
   try {
     dispatch({ type: "CREATE_ORDER_REQUEST" });
-    await axios.post(`${serverEndpointSwitch}/api/v1/orders`, orderData);
-    dispatch({ type: "CREATE_ORDER_SUCCESS" });
+    return await axios.post(`${serverEndpointSwitch}/api/v1/orders`, orderData);
   } catch (error) {
     dispatch({ type: "CREATE_ORDER_FAILURE", payload: error.message });
   }
@@ -107,6 +143,9 @@ const OrdersProvider = ({ children }) => {
         updateOrder: (orderId, orderData) =>
           updateOrder(dispatch, orderId, orderData),
         deleteOrder: (orderId) => deleteOrder(dispatch, orderId),
+        onCompletedOrder: (completedOrder) =>
+          onCompletedOrder(dispatch, completedOrder),
+        completedOrder: state.completedOrder,
       }}
     >
       {children}

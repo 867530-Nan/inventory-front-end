@@ -9,6 +9,7 @@ const QRCodeManager = () => {
   const { addQRCode, stylesByQRArray, deleteQRCode } = useQRCodesManager();
 
   const handleInputChange = (event) => {
+    event.preventDefault();
     setQRCodeInput(event.target.value);
   };
 
@@ -33,6 +34,14 @@ const QRCodeManager = () => {
   const toggleQRCodeManager = () => {
     setQRCodeManagerVisibility(!isQRCodeManagerVisible);
   };
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      // Trigger the click event
+      document.getElementById("addButton").click();
+    }
+  };
+
   return (
     <div>
       {/* Single-Input Form */}
@@ -43,12 +52,16 @@ const QRCodeManager = () => {
             type="text"
             value={qrCodeInput}
             onChange={handleInputChange}
+            onKeyUp={handleKeyPress}
             className="py-2 px-3 border border-gray-300 rounded-md"
           />
         </label>
         <button
+          type="button"
           className="mt-2.5 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          onClick={handleSaveQRCode}
+          id="addButton"
+          onClick={() => handleSaveQRCode()}
+          onKeyUp={handleKeyPress}
         >
           Add
         </button>
@@ -59,6 +72,7 @@ const QRCodeManager = () => {
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={toggleQRCodeManager}
+          type="button"
         >
           {!isQRCodeManagerVisible ? "Scan QR Code" : "Close"}
         </button>

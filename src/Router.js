@@ -19,6 +19,7 @@ import NotFound from "./components/NotFound";
 import PrivateRoute from "./components/PrivateRoute";
 import ForgotPassword from "./components/ForgotPassword";
 import UpdateProfile from "./components/UpdateProfile";
+import OrderConfirmation from "./components/OrderConfirmation";
 
 import MobileNav from "./components/header-nav/mobileNav";
 import DesktopNav from "./components/header-nav/desktopNav";
@@ -46,7 +47,7 @@ const Router = () => {
             {/* <PrivateRoute path="new-style/*" element={<NewStyle />} />
           <PrivateRoute path="update-profile/" element={<UpdateProfile />} /> */}
             <Route
-              path="/order-dashboard"
+              path="/order-manager"
               element={
                 currentUser ? <OrderDashboard /> : <Navigate replace to="/" />
               }
@@ -60,6 +61,7 @@ const Router = () => {
             <Route path="/signup" element={<Signup />} />
             <Route path="/logout" element={<Logout />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/order-confirmation" element={<OrderConfirmation />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route element={<NotFound />} />
           </Routes>
