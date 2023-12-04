@@ -1,38 +1,41 @@
-.App {
-  text-align: center;
+:root {
+  --base-font-size: 16px;
+  --font-scale-factor: 1; /* Adjust as needed for scaling */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+body {
+  font-size: var(--base-font-size);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+h1 {
+  font-size: calc(2.5rem * var(--font-scale-factor));
+  /* Additional styling for h1, e.g., font-weight, margin, etc. */
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+h2 {
+  font-size: calc(2rem * var(--font-scale-factor));
+  /* Additional styling for h2, e.g., font-weight, margin, etc. */
 }
 
-.App-link {
-  color: #61dafb;
+h3 {
+  font-size: calc(1.75rem * var(--font-scale-factor));
+  /* Additional styling for h3, e.g., font-weight, margin, etc. */
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+p {
+  font-size: calc(1rem * var(--font-scale-factor));
+  /* Additional styling for paragraphs, e.g., line-height, margin, etc. */
 }
+
+/* Example for other elements */
+a {
+  font-size: calc(1rem * var(--font-scale-factor));
+  /* Additional styling for links */
+}
+
+button {
+  font-size: calc(1rem * var(--font-scale-factor));
+  /* Additional styling for buttons */
+}
+
+/* Adjust as needed for other HTML elements in your application */

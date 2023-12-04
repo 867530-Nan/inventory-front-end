@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState } from "react";
 import axios from "axios";
 import { serverEndpointSwitch } from "../utils/common";
 
-// Context
 const OrdersContext = createContext();
 
 // {
@@ -21,14 +20,12 @@ const OrdersContext = createContext();
 //   "style_color": "0280 Whakarewarewa"
 // }
 
-// Context Provider
 const OrdersProvider = ({ children }) => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [completedOrder, setCompletedOrder] = useState({});
 
-  // Actions
   const fetchOrders = async () => {
     try {
       setLoading(true);
@@ -118,7 +115,6 @@ const OrdersProvider = ({ children }) => {
   );
 };
 
-// Custom Hook
 const useOrders = () => {
   const context = useContext(OrdersContext);
   if (!context) {

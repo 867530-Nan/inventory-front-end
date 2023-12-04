@@ -83,7 +83,7 @@ const NewOrderForm = ({}) => {
     if (e.key === "Enter") {
       e.preventDefault();
       // Trigger the click event
-      document.getElementById("submitButton").click();
+      document.getElementById("newOrderSubmit").click();
     }
   };
 
@@ -150,14 +150,14 @@ const NewOrderForm = ({}) => {
           </label>
           <div>
             <h2 className="mt-2">Sample Manager</h2>
-            <div className="mt-2">
+            <div className="mt-2 flex">
               <QRCodeManager />
             </div>
           </div>
           <div className="mt-3">
             <button
               type="button"
-              id="submitButton"
+              id="newOrderSubmit"
               onClick={() => handleSubmit()}
               onKeyUp={handleKeyPress}
             >

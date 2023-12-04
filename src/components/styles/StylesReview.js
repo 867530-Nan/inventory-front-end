@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import QRCode from "react-qr-code";
 import { serverEndpointSwitch } from "../../utils/common";
 import { useStylesContext } from "../../contexts/StylesContext";
 import SampleManagementComponent from "./StylesManager";
@@ -35,13 +34,19 @@ const StylesReview = ({}) => {
   };
 
   return (
-    <div>
-      <label>Select a style:</label>
-      <select onChange={handleStyleChange} value={selectedStyle?.id}>
-        <option value={null}>Select a style</option>
+    <div className="flex flex-column">
+      <label>Select a Style:</label>
+      <select
+        onChange={handleStyleChange}
+        value={selectedStyle?.id}
+        className="border rounded p-2 focus:outline-none focus:ring focus:border-blue-300"
+      >
+        <option value={null} className="text-gray-500">
+          Name
+        </option>
         {uniqueStylesArray.length &&
           uniqueStylesArray.map((style) => (
-            <option key={style} value={style}>
+            <option key={style} value={style} className="text-black">
               {style}
             </option>
           ))}

@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { useTable, usePagination } from "react-table";
 import GenericTable from "../generic/GenericTable";
 import { useOrders } from "../../contexts/OrdersContext";
 import moment from "moment";
 
-const Dashboard = ({ onRowClick }) => {
-  const { orders, filterOrdersByName, filterOrdersByEmail } = useOrders();
+const OrdersDashboard = ({ onRowClick }) => {
+  const { filterOrdersByName, filterOrdersByEmail } = useOrders();
   const [nameFilter, setNameFilter] = useState("");
   const [emailFilter, setEmailFilter] = useState("");
   const [filterOption, setFilterOption] = useState("name"); // Default to filtering by name
@@ -22,14 +21,9 @@ const Dashboard = ({ onRowClick }) => {
   const formattedDate = (date) => moment(date).format("MM/DD/YYYY");
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-      }}
-    >
-      <h1>Orders Dashboard</h1>
-      <div style={{ display: "flex", justifyContent: "space-around" }}>
+    <div className="flex flex-col">
+      <h2 className="my-2">Orders Dashboard</h2>
+      <div style={{ display: "flex" }}>
         <div>
           <div style={{ marginBottom: "10px" }}>
             <label>
@@ -97,4 +91,4 @@ const Dashboard = ({ onRowClick }) => {
   );
 };
 
-export default Dashboard;
+export default OrdersDashboard;

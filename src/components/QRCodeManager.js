@@ -5,7 +5,7 @@ import { useQRCodesManager } from "../contexts/QRCodesContext";
 const QRCodeManager = () => {
   const [qrCodeInput, setQRCodeInput] = useState("");
   const [scannedQRCode, setScannedQRCode] = useState("");
-  const [isQRCodeManagerVisible, setQRCodeManagerVisibility] = useState("");
+  const [isQRCodeManagerVisible, setQRCodeManagerVisibility] = useState(false);
   const { addQRCode, stylesByQRArray, deleteQRCode } = useQRCodesManager();
 
   const handleInputChange = (event) => {
@@ -24,16 +24,16 @@ const QRCodeManager = () => {
     addQRCode(scannedCode);
     setScannedQRCode(scannedCode);
     setQRCodeManagerVisibility(false);
-    // createOrder({ qr_code: scannedCode });
   };
 
   const handleDelete = (qr) => {
     deleteQRCode(qr);
   };
 
-  const toggleQRCodeManager = () => {
-    setQRCodeManagerVisibility(!isQRCodeManagerVisible);
+  const toggleQRCodeManager = (manualEntry) => {
+    setQRCodeManagerVisibility(manualEntry);
   };
+
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -44,45 +44,65 @@ const QRCodeManager = () => {
 
   return (
     <div>
-      {/* Single-Input Form */}
-      <div className="flex items-center justify-center align-middle">
-        <label className="mr-2">
-          Enter QR Code:
-          <input
-            type="text"
-            value={qrCodeInput}
-            onChange={handleInputChange}
-            onKeyUp={handleKeyPress}
-            className="py-2 px-3 border border-gray-300 rounded-md"
-          />
-        </label>
+      {/* Buttons for Manual Entry and Scan QR Code */}
+      <div className="flex justify-between mt-4">
         <button
           type="button"
-          className="mt-2.5 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          id="addButton"
-          onClick={() => handleSaveQRCode()}
-          onKeyUp={handleKeyPress}
+          className={`py-2 px-4 rounded text-white font-bold bg-blue-400 bg-blue-300 ${
+            !isQRCodeManagerVisible ? "bg-blue-900" : ""
+          }`}
+          onClick={() => toggleQRCodeManager(false)}
         >
-          Add
+          Manual Entry
+        </button>
+
+        <button
+          type="button"
+          className={`py-2 px-4 rounded text-white font-bold bg-blue-400 ${
+            isQRCodeManagerVisible ? "bg-blue-900" : ""
+          }`}
+          onClick={() => toggleQRCodeManager(true)}
+        >
+          Scan QR Code
         </button>
       </div>
 
-      {/* QR Scanner */}
-      <div>
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={toggleQRCodeManager}
-          type="button"
-        >
-          {!isQRCodeManagerVisible ? "Scan QR Code" : "Close"}
-        </button>
-        {/* Assuming you have a QRScanner component that takes handleScanQRCode as a prop */}
-        <QRScanner
-          onNewScanResult={handleScanQRCode}
-          scanning={isQRCodeManagerVisible}
-        />
-        {scannedQRCode && <p>Scanned QR Code: {scannedQRCode}</p>}
-      </div>
+      {/* Render Manual Entry Input and "Add" Button */}
+      {!isQRCodeManagerVisible && (
+        <div className="flex items-center justify-center mt-4">
+          <label className="mr-2">
+            Enter QR Code:
+            <input
+              type="text"
+              value={qrCodeInput}
+              onChange={handleInputChange}
+              onKeyUp={handleKeyPress}
+              className="py-2 px-3 border border-gray-300 rounded-md"
+            />
+          </label>
+          <button
+            type="button"
+            className="mt-2.5 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            id="addButton"
+            onClick={() => handleSaveQRCode()}
+            onKeyUp={handleKeyPress}
+          >
+            Add
+          </button>
+        </div>
+      )}
+
+      {/* Render QR Scanner */}
+      {isQRCodeManagerVisible && (
+        <div>
+          {/* Assuming you have a QRScanner component that takes handleScanQRCode as a prop */}
+          <QRScanner
+            onNewScanResult={handleScanQRCode}
+            scanning={isQRCodeManagerVisible}
+          />
+          {scannedQRCode && <p>Scanned QR Code: {scannedQRCode}</p>}
+        </div>
+      )}
 
       {/* Table for Displaying QR Codes */}
       <div>

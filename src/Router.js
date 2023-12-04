@@ -13,7 +13,6 @@ import Home from "./components/Home";
 import Logout from "./components/Logout";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
-import Styles from "./components/styles";
 import OrderManager from "./components/orders";
 import Contact from "./components/Contact";
 import NotFound from "./components/NotFound";
@@ -26,6 +25,7 @@ import MobileNav from "./components/header-nav/mobileNav";
 import DesktopNav from "./components/header-nav/desktopNav";
 import TabletNav from "./components/header-nav/tabletNav";
 import NewOrderForm from "./components/orders/NewOrderForm";
+import StylesContainer from "./components/styles";
 
 const Router = () => {
   const { currentUser } = auth;
@@ -38,7 +38,7 @@ const Router = () => {
 
   return (
     <BrowserRouter>
-      <div className="flex h-100vh overflow-hidden">
+      <div className="flex h-100vh">
         <div className="h-screen">
           {isNotMobile && <DesktopNav />}
           {isMobile && <MobileNav />}
@@ -48,14 +48,26 @@ const Router = () => {
             {/* <PrivateRoute path="new-style/*" element={<NewStyle />} />
           <PrivateRoute path="update-profile/" element={<UpdateProfile />} /> */}
             <Route
-              path="/order-manager"
+              path="orders/"
               element={
                 currentUser ? <OrderManager /> : <Navigate replace to="/" />
               }
             />
             <Route
               path="styles/*"
-              element={currentUser ? <Styles /> : <Navigate replace to="/" />}
+              element={
+                currentUser ? <StylesContainer /> : <Navigate replace to="/" />
+              }
+            />
+            <Route
+              path="dashboard/*"
+              element={
+                currentUser ? (
+                  <h1 className="m-5">Home Dash</h1>
+                ) : (
+                  <Navigate replace to="/" />
+                )
+              }
             />
             <Route exact path="/" element={<Login />} />
             {/* <Route exact path="/home" element={<NewOrderForm />} /> */}

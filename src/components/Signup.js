@@ -32,10 +32,10 @@ export default function Signup() {
   }
 
   return (
-    <>
-      <Card>
+    <div className="w-screen h-screen flex justify-center items-center">
+      <Card style={{ minWidth: "300px", maxWidth: "400px" }}>
         <Card.Body>
-          <h2 className="text-center mb-4">Sign Up</h2>
+          <h2 className="text-center mb-4 font-bold">Sign Up</h2>
           {error && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Form.Group id="email">
@@ -50,15 +50,22 @@ export default function Signup() {
               <Form.Label>Password Confirmation</Form.Label>
               <Form.Control type="password" ref={passwordConfirmRef} required />
             </Form.Group>
-            <Button disabled={loading} className="w-100" type="submit">
+            <Button
+              disabled={loading}
+              className="mt-3 w-100 p-2 text-white rounded transition duration-300 ease-in-out bg-blue-500 hover:bg-gray-500"
+              type="submit"
+            >
               Sign Up
             </Button>
           </Form>
+          <div className="w-100 text-center mt-2">
+            Already have an account?{" "}
+            <Link to="/login" className="font-bold hover:underline">
+              Log In
+            </Link>
+          </div>
         </Card.Body>
       </Card>
-      <div className="w-100 text-center mt-2">
-        Already have an account? <Link to="/login">Log In</Link>
-      </div>
-    </>
+    </div>
   );
 }

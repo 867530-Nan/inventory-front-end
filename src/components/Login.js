@@ -26,10 +26,10 @@ export default function Login() {
   }
 
   return (
-    <>
-      <Card>
+    <div className="w-screen h-screen flex justify-center items-center">
+      <Card style={{ minWidth: "300px", maxWidth: "400px" }}>
         <Card.Body>
-          <h2 className="text-center mb-4">Log In</h2>
+          <h2 className="text-center mb-4 font-bold">Log In</h2>
           {error && <Alert variant="danger">{error}</Alert>}
           <Form onSubmit={handleSubmit}>
             <Form.Group id="email">
@@ -40,18 +40,27 @@ export default function Login() {
               <Form.Label>Password</Form.Label>
               <Form.Control type="password" ref={passwordRef} required />
             </Form.Group>
-            <Button disabled={loading} className="w-100" type="submit">
+            <Button
+              disabled={loading}
+              className="mt-3 w-100 p-2 text-white rounded transition duration-300 ease-in-out bg-blue-500 hover:bg-gray-500"
+              type="submit"
+            >
               Log In
             </Button>
           </Form>
           <div className="w-100 text-center mt-3">
-            <Link to="/forgot-password">Forgot Password?</Link>
+            <Link to="/forgot-password" className="font-bold hover:underline">
+              Forgot Password?
+            </Link>
+          </div>
+          <div className="w-100 text-center mt-2">
+            Need an account?{" "}
+            <Link to="/signup" className="font-bold hover:underline">
+              Sign Up
+            </Link>
           </div>
         </Card.Body>
       </Card>
-      <div className="w-100 text-center mt-2">
-        Need an account? <Link to="/signup">Sign Up</Link>
-      </div>
-    </>
+    </div>
   );
 }
