@@ -38,12 +38,12 @@ const Router = () => {
 
   return (
     <BrowserRouter>
-      <div className="flex h-100vh">
-        <div className="h-screen">
+      <div className="flex h-screen overflow-hidden">
+        <div className="w-1/5 overflow-y-auto fixed inset-y-0 left-0">
           {isNotMobile && <DesktopNav />}
           {isMobile && <MobileNav />}
         </div>
-        <div className="flex-1 h-full">
+        <div className="flex-1 overflow-x-auto overflow-y-auto p-4 ml-[20%]">
           <Routes>
             {/* <PrivateRoute path="new-style/*" element={<NewStyle />} />
           <PrivateRoute path="update-profile/" element={<UpdateProfile />} /> */}

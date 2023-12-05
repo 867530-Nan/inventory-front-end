@@ -21,7 +21,11 @@ export const QRCodesManagerProvider = ({ children }) => {
           `${serverEndpointSwitch}/api/v1/qr-singles/${newQRCode}/style-by-qr`,
         )
         .then((res) => setStylesByQR({ ...stylesByQR, [newQRCode]: res.data }))
-        .catch((err) => console.error("error fetching the style by QR", err));
+        .catch((err) => {
+          delete stylesByQR[newQRCode];
+          alert(`Sample not found for QR: ${newQRCode}`);
+          console.error("error fetching the style by QR", err);
+        });
     }
   };
 
@@ -40,7 +44,7 @@ export const QRCodesManagerProvider = ({ children }) => {
 
   // Delete a QR code
   const deleteQRCode = (qr) => {
-    console.log("delete the qr", qr);
+    console.log("the qr", qr);
     setQRCodes((prevQRCodes) => {
       return prevQRCodes.filter((qrCode) => qrCode !== qr);
     });

@@ -16,25 +16,35 @@ function OrdersContainer() {
     setForcedKey(key);
   };
 
+  const handleOrderClick = (order) => {
+    console.log("handle order click", order);
+    // onSelectStyle(style);
+    // setForcedKey("single");
+    // setPassedStyle(style.id);
+  };
+
   const tabs = [
     {
-      eventKey: "review",
-      title: "Review",
+      eventKey: "dashboard",
+      title: "Dashboard",
       component: (
         <OrdersDashboard
           orders={orders}
           onOrderClick={() => onOrderClick("new")}
+          onRowClick={handleOrderClick}
         />
       ),
     },
     {
       eventKey: "new",
       title: "New +",
-      component: <NewOrderForm onRowClick={() => console.log("shoot")} />,
+      component: <NewOrderForm />,
     },
   ];
 
-  return <TabContainer tabs={tabs} initialKey="review" forcedKey={forcedKey} />;
+  return (
+    <TabContainer tabs={tabs} initialKey="dashboard" forcedKey={forcedKey} />
+  );
 }
 
 export default OrdersContainer;

@@ -27,6 +27,7 @@ const QRCodeManager = () => {
   };
 
   const handleDelete = (qr) => {
+    console.log("handle delete", qr);
     deleteQRCode(qr);
   };
 
@@ -73,7 +74,7 @@ const QRCodeManager = () => {
           <label className="mr-2">
             Enter QR Code:
             <input
-              type="text"
+              type="number"
               value={qrCodeInput}
               onChange={handleInputChange}
               onKeyUp={handleKeyPress}
@@ -117,21 +118,24 @@ const QRCodeManager = () => {
             </tr>
           </thead>
           <tbody>
-            {stylesByQRArray.map((order) => (
-              <tr key={order.id}>
-                <td>{order.name} </td>
-                <td>{order.color} </td>
-                <td>{order.qr_code}</td>
-                <td>
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(order.qr_code)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {stylesByQRArray.map((order) => {
+              console.log("the order", order.qr_code);
+              return (
+                <tr key={order.id}>
+                  <td>{order.name} </td>
+                  <td>{order.color} </td>
+                  <td>{order.qr_code}</td>
+                  <td>
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(order.qr_code)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       </div>

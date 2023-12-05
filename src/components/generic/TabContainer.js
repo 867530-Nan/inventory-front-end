@@ -18,7 +18,7 @@ const TabContainer = ({ initialKey, tabs, forcedKey }) => {
   }, []);
 
   return (
-    <div id="fuck" className="h-screen m-2 mt-2 mb-0">
+    <div className=" h-screen m-2 mt-2 mb-0">
       <Tab.Container
         id="controlled-tab-example"
         activeKey={key}
@@ -35,9 +35,9 @@ const TabContainer = ({ initialKey, tabs, forcedKey }) => {
             </Nav>
           </Col>
         </Row>
-        <Row className="overflow-y-scroll p-3">
+        <Row className="p-3">
           <Col>
-            <Tab.Content>
+            <Tab.Content className="">
               {tabs.map((tab) => (
                 <Tab.Pane eventKey={tab.eventKey}>{tab.component}</Tab.Pane>
               ))}
