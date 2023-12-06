@@ -61,13 +61,7 @@ const Router = () => {
             />
             <Route
               path="dashboard/*"
-              element={
-                currentUser ? (
-                  <h1 className="m-5">Home Dash</h1>
-                ) : (
-                  <Navigate replace to="/" />
-                )
-              }
+              element={currentUser ? <Home /> : <Navigate replace to="/" />}
             />
             <Route exact path="/" element={<Login />} />
             {/* <Route exact path="/home" element={<NewOrderForm />} /> */}

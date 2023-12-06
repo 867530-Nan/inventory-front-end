@@ -1,109 +1,33 @@
 import React from "react";
-import QRCodeScanner from "./QRCodeScanner";
-import SampleList from "./SampleList";
-import axios from "axios";
-import { serverEndpointSwitch } from "../utils/common";
+import { Link } from "react-router-dom";
 
-function Home() {
-  const [text, setText] = React.useState(undefined);
-  const [res, setRes] = React.useState();
-  const [scanning, setScanning] = React.useState(false);
-
-  const startScan = () => {
-    setScanning(true);
-  };
-
-  const onNewScanResult = (decodedText, decodedResult) => {
-    if (decodedText) {
-      axios
-        .get(`${serverEndpointSwitch}/api/v1/qr-singles/${decodedText}`)
-        .then((response) => {
-          setText(response.data[0]);
-          setScanning(false);
-        })
-        .catch((error) => {
-          setScanning(false);
-        })
-        .finally(() => {
-          setScanning(false);
-        });
-    } else setText("no decode");
-    if (decodedResult) {
-      setRes(decodedResult);
-    } else setRes("no bueno my guy");
-  };
-
-  const displayObjectInfo = (obj) => {
-    let info = "";
-    for (const key in obj) {
-      info += `${key}: ${obj[key]}\n`;
-    }
-    return info;
-  };
+const Dashboard = () => {
+  // Placeholder data (replace with actual data)
+  const stats = [
+    { title: "Samples at Inventory 0", value: 150 },
+    { title: "Most Popular Sample", value: "Sample A" },
+    { title: "Samples Checked Out", value: 120 },
+    { title: "Current Orders", value: 10 },
+  ];
 
   return (
-    <div className="App">
-      <button onClick={startScan}>fart scanner</button>
-      <hr />
-      <hr />
-      {scanning && (
-        <div style={{ height: "300px", width: 300 }}>
-          <QRCodeScanner
-            fps={10}
-            qrbox={250}
-            disableFlip={false}
-            qrCodeSuccessCallback={onNewScanResult}
-          />
-        </div>
-      )}
-      <div style={{ marginTop: 200 }}>
-        <h1>Is text?: {text ? "yes" : "no"}</h1>
-        {text && <h1>The decoded text: {displayObjectInfo(text)}</h1>}
+    <div className="bg-gray-100 min-h-screen p-8">
+      <h1 className="text-3xl font-bold mb-8">Inventory Dashboard</h1>
+
+      <div className="grid grid-cols-2 gap-8">
+        {stats.map((stat, index) => (
+          <Link
+            key={index}
+            to={`/${stat.title.toLowerCase().replace(/\s/g, "-")}`}
+            className="bg-white p-6 rounded-md shadow-md transition duration-300 ease-in-out transform hover:scale-105"
+          >
+            <h3 className="text-lg font-bold mb-2">{stat.title}</h3>
+            <p className="text-2xl">{stat.value}</p>
+          </Link>
+        ))}
       </div>
-      <SampleList />
     </div>
   );
-}
+};
 
-export default Home;
-
-// import React, { useState } from 'react';
-// import QrReader from 'react-qr-reader';
-
-// function QRScanner({ onScan }) {
-//   const [scanning, setScanning] = useState(false);
-
-//   const handleScan = (data) => {
-//     if (data) {
-//       // QR code was successfully scanned
-//       setScanning(false); // Close the scanner
-//       onScan(data); // Callback on success
-//     }
-//   };
-
-//   const handleError = (error) => {
-//     // Handle the error as needed
-//     setScanning(false); // Close the scanner
-//     // You can also trigger a callback on failure if desired
-//   };
-
-//   const startScan = () => {
-//     setScanning(true);
-//   };
-
-//   return (
-//     <div>
-//       <button onClick={startScan}>Open QR Scanner</button>
-//       {scanning && (
-//         <QrReader
-//           delay={300} // Delay between scans (in milliseconds)
-//           onError={handleError}
-//           onScan={handleScan}
-//           style={{ width: '100%' }} // Adjust the style as needed
-//         />
-//       )}
-//     </div>
-//   );
-// }
-
-// export default QRScanner;
+export default Dashboard;

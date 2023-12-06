@@ -38,7 +38,12 @@ export default function DesktopNav() {
           </NavLink>
         ))}
       </ul>
-      {currentUser && <p className="mt-">{currentUser.email}</p>}
+      {currentUser && (
+        <small style={{ marginLeft: 5 }}>
+          Logged in as:{"\n"}
+          {currentUser.email}
+        </small>
+      )}
     </div>
   );
 }

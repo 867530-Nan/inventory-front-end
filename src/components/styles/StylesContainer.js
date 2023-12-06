@@ -19,7 +19,7 @@ function StylesContainer() {
   const tabs = [
     {
       eventKey: "dashboard",
-      title: "Dashboard",
+      title: "All Styles",
       component: <StylesDashboard onRowClick={handleStyleClick} />,
     },
     {

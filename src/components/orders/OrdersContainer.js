@@ -26,7 +26,7 @@ function OrdersContainer() {
   const tabs = [
     {
       eventKey: "dashboard",
-      title: "Dashboard",
+      title: "All Orders",
       component: (
         <OrdersDashboard
           orders={orders}

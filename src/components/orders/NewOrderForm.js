@@ -61,22 +61,22 @@ const NewOrderForm = ({}) => {
   };
 
   const handleSubmit = (e) => {
-    console.log("handle submit");
-    createOrder({
-      customer: {
-        name: customerName,
-        address: customerAddress,
-        phoneNumber: customerPhoneNumber,
-        email: customerEmail,
-      },
-      qr_code_ids: Object.values(stylesByQRArray).map((s) => s.id),
-    })
-      .then((res) => {
-        console.log("great success: ", res.data);
-        onCompletedOrder(res.data);
-        return redirect("/order-confirmation");
-      })
-      .catch((e) => console.error("could not create order, sorry man"));
+    console.log(Object.values(stylesByQRArray).map((s) => s.id));
+    // createOrder({
+    //   customer: {
+    //     name: customerName,
+    //     address: customerAddress,
+    //     phoneNumber: customerPhoneNumber,
+    //     email: customerEmail,
+    //   },
+    //   qr_code_ids: Object.values(stylesByQRArray).map((s) => s.id),
+    // })
+    //   .then((res) => {
+    //     console.log("great success: ", res.data);
+    //     onCompletedOrder(res.data);
+    //     return redirect("/order-confirmation");
+    //   })
+    //   .catch((e) => console.error("could not create order, sorry man"));
   };
 
   const handleKeyPress = (e) => {
@@ -92,62 +92,67 @@ const NewOrderForm = ({}) => {
       <h2>New Order</h2>
       <div className="mt-3">
         <form onSubmit={handleSubmit}>
-          <label>
-            Customer Name:
-            <input
-              type="text"
-              value={customerName}
-              onChange={handleCustomerNameChange}
-              placeholder="Name"
-            />
-          </label>
+          <div id="fuck" className="flex flex-col">
+            <label>
+              Customer Name:
+              <input
+                type="text"
+                value={customerName}
+                onChange={handleCustomerNameChange}
+                placeholder=" Name"
+              />
+            </label>
 
-          {customerOptions.length > 0 && (
-            <ul className="customer-options">
-              {customerOptions.map((customer, index) => (
-                <li key={index} onClick={() => handleCustomerSelect(customer)}>
-                  {customer.name}
-                </li>
-              ))}
-            </ul>
-          )}
+            {customerOptions.length > 0 && (
+              <ul className="customer-options">
+                {customerOptions.map((customer, index) => (
+                  <li
+                    key={index}
+                    onClick={() => handleCustomerSelect(customer)}
+                  >
+                    {customer.name}
+                  </li>
+                ))}
+              </ul>
+            )}
 
-          <label>
-            Customer Address:
-            <input
-              type="text"
-              value={customerAddress}
-              placeholder="Address"
-              onChange={(e) => setCustomerAddress(e.target.value)}
-            />
-            {/* <Autocomplete
+            <label>
+              Customer Address:
+              <input
+                type="text"
+                value={customerAddress}
+                placeholder=" Address"
+                onChange={(e) => setCustomerAddress(e.target.value)}
+              />
+              {/* <Autocomplete
               apiKey="AIzaSyBZYDN1laILCfG1zbm6ImoK3dtzFGQDFMc"
               value={customerAddress}
               onPlaceSelected={(place) => {
                 setCustomerAddress(place.formatted_address);
               }}
             /> */}
-          </label>
+            </label>
 
-          <label>
-            Customer Phone Number:
-            <input
-              type="phone"
-              value={customerPhoneNumber}
-              placeholder="Phone"
-              onChange={(e) => setCustomerPhoneNumber(e.target.value)}
-            />
-          </label>
+            <label>
+              Customer Phone Number:
+              <input
+                type="phone"
+                value={customerPhoneNumber}
+                placeholder=" Phone"
+                onChange={(e) => setCustomerPhoneNumber(e.target.value)}
+              />
+            </label>
 
-          <label>
-            Customer Email:
-            <input
-              type="text"
-              value={customerEmail}
-              placeholder="Email"
-              onChange={(e) => setCustomerEmail(e.target.value)}
-            />
-          </label>
+            <label>
+              Customer Email:
+              <input
+                type="text"
+                value={customerEmail}
+                placeholder=" Email"
+                onChange={(e) => setCustomerEmail(e.target.value)}
+              />
+            </label>
+          </div>
           <div>
             <h2 className="mt-2">Sample Manager</h2>
             <div className="mt-2 flex">

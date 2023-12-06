@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { Form, Button, Card, Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
 
 export default function Login() {
   const emailRef = useRef();
@@ -11,13 +12,18 @@ export default function Login() {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  React.useEffect(() => {
+    const { currentUser } = auth;
+    if (currentUser) navigate("/dashboard");
+  }, []);
+
   async function handleSubmit(e) {
     e.preventDefault();
     try {
       setError("");
       setLoading(true);
       await login(emailRef.current.value, passwordRef.current.value);
-      navigate("/home");
+      navigate("/dashboard");
     } catch (err) {
       setError("Failed to log in", err);
     }
