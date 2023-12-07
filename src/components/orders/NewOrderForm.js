@@ -15,16 +15,10 @@ const NewOrderForm = ({}) => {
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerOptions, setCustomerOptions] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const navigate = useNavigate();
-  // ...
 
-  const [isModalOpen, setModalOpen] = useState(false);
+  const navigate = useNavigate();
   const { stylesByQRArray } = useQRCodesManager();
   const { createOrder, onCompletedOrder, completedOrder } = useOrders();
-
-  const toggleModal = () => {
-    setModalOpen(!isModalOpen);
-  };
 
   useEffect(() => {
     if (completedOrder?.order?.id) {
@@ -61,22 +55,21 @@ const NewOrderForm = ({}) => {
   };
 
   const handleSubmit = (e) => {
-    console.log(Object.values(stylesByQRArray).map((s) => s.id));
-    // createOrder({
-    //   customer: {
-    //     name: customerName,
-    //     address: customerAddress,
-    //     phoneNumber: customerPhoneNumber,
-    //     email: customerEmail,
-    //   },
-    //   qr_code_ids: Object.values(stylesByQRArray).map((s) => s.id),
-    // })
-    //   .then((res) => {
-    //     console.log("great success: ", res.data);
-    //     onCompletedOrder(res.data);
-    //     return redirect("/order-confirmation");
-    //   })
-    //   .catch((e) => console.error("could not create order, sorry man"));
+    createOrder({
+      customer: {
+        name: customerName,
+        address: customerAddress,
+        phoneNumber: customerPhoneNumber,
+        email: customerEmail,
+      },
+      qr_code_ids: Object.values(stylesByQRArray).map((s) => s.id),
+    })
+      .then((res) => {
+        console.log("great success: ", res.data);
+        onCompletedOrder(res.data);
+        return redirect("/order-confirmation");
+      })
+      .catch((e) => console.error("could not create order, sorry man"));
   };
 
   const handleKeyPress = (e) => {
