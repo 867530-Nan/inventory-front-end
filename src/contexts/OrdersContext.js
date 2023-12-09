@@ -24,10 +24,10 @@ const OrdersProvider = ({ children }) => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [orderID, setOrderID] = useState("");
   const [orderInformation, setOrderInformation] = useState({});
   const [customerName, setCustomerName] = useState("");
   const [customerAddress, setCustomerAddress] = useState("");
-  const [orderID, setOrderID] = useState("");
   const [orderCheckin, setOrderCheckin] = React.useState("");
   const [orderCheckout, setOrderCheckout] = React.useState("");
   const [customerPhoneNumber, setCustomerPhoneNumber] = useState("");
@@ -131,6 +131,8 @@ const OrdersProvider = ({ children }) => {
     filterOrdersByName,
     fetchOrders,
     createOrder,
+    orderID,
+    setOrderID,
     updateOrder,
     orderID,
     orderCheckin,

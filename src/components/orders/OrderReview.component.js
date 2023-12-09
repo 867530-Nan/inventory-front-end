@@ -6,14 +6,13 @@ import { useOrders } from "../../contexts/OrdersContext";
 import { useQRCodesManager } from "../../contexts/QRCodesContext";
 
 const OrderReview = () => {
-  const [orderId, setOrderId] = useState("");
-  const { orderInformation, setOrderReview, orderID } = useOrders();
+  const { setOrderReview, orderID, setOrderID } = useOrders();
   const { setBulkStylesByQr } = useQRCodesManager();
 
   const handleSubmit = async () => {
     try {
       const response = await axios.get(
-        `${serverEndpointSwitch}/api/v1/orders/${orderId}`,
+        `${serverEndpointSwitch}/api/v1/orders/${orderID}`,
       );
       const { order, customer, codesAndStyles } = response.data;
       setOrderReview(customer, order);
@@ -23,9 +22,9 @@ const OrderReview = () => {
     }
   };
 
-  React.useEffect(() => {
-    if (orderID) setOrderId(orderID);
-  }, [orderID]);
+  // React.useEffect(() => {
+  //   if (orderID) setOrderID(orderID);
+  // }, [orderID]);
 
   const handleUpdate = () => {
     // Handle update logic
@@ -43,11 +42,11 @@ const OrderReview = () => {
           Order Number:
           <input
             type="number"
-            value={orderId}
-            onChange={(e) => setOrderId(e.target.value)}
+            value={orderID}
+            onChange={(e) => setOrderID(e.target.value)}
           />
         </label>
-        {orderId.length ? (
+        {orderID?.length ? (
           <button type="button" onClick={handleSubmit}>
             Submit
           </button>
