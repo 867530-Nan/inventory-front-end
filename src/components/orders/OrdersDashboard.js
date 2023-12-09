@@ -25,7 +25,7 @@ const OrdersDashboard = ({ onRowClick }) => {
       <h2 className="my-2">Orders Dashboard</h2>
       <div style={{ display: "flex" }}>
         <div>
-          <div style={{ marginBottom: "10px" }}>
+          <div className="mb-5 flex">
             <label>
               <input
                 type="radio"

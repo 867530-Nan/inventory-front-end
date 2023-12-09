@@ -1,4 +1,4 @@
-import NewOrderForm from "./NewOrderForm";
+import NewOrderContainer from "./NewOrderContainer";
 import OrdersDashboard from "./OrdersDashboard";
 import React, { useState } from "react";
 import { useOrders } from "../../contexts/OrdersContext";
@@ -40,11 +40,11 @@ function OrdersContainer() {
     {
       eventKey: "new",
       title: "New +",
-      component: <NewOrderForm />,
+      component: <NewOrderContainer />,
     },
     {
-      eventKey: "checkin",
-      title: "Check-In",
+      eventKey: "review",
+      title: "Review",
       component: <OrderReview />,
     },
   ];

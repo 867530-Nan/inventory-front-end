@@ -25,6 +25,12 @@ const OrdersProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [completedOrder, setCompletedOrder] = useState({});
+  const [customerName, setCustomerName] = useState("");
+  const [customerAddress, setCustomerAddress] = useState("");
+  const [customerPhoneNumber, setCustomerPhoneNumber] = useState("");
+  const [customerEmail, setCustomerEmail] = useState("");
+  const [customerOptions, setCustomerOptions] = useState([]);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
 
   const fetchOrders = async () => {
     try {
@@ -114,6 +120,18 @@ const OrdersProvider = ({ children }) => {
     onCompletedOrder,
     completedOrder,
     resetCompletedOrder,
+    customerName,
+    setCustomerName,
+    customerAddress,
+    setCustomerAddress,
+    customerPhoneNumber,
+    setCustomerPhoneNumber,
+    customerEmail,
+    setCustomerEmail,
+    customerOptions,
+    setCustomerOptions,
+    selectedCustomer,
+    setSelectedCustomer,
   };
 
   return (
