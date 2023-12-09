@@ -6,8 +6,18 @@ import { useOrders } from "../../contexts/OrdersContext";
 import { useQRCodesManager } from "../../contexts/QRCodesContext";
 
 const OrderReview = () => {
-  const { setOrderReview, orderID, setOrderID } = useOrders();
-  const { setBulkStylesByQr } = useQRCodesManager();
+  const {
+    setOrderReview,
+    orderID,
+    customerName,
+    customerAddress,
+    orderCheckin,
+    orderCheckout,
+    customerPhoneNumber,
+    customerEmail,
+    setOrderID,
+  } = useOrders();
+  const { setBulkStylesByQr, getQRCodeIDs } = useQRCodesManager();
 
   const handleSubmit = async () => {
     try {
@@ -26,8 +36,26 @@ const OrderReview = () => {
   //   if (orderID) setOrderID(orderID);
   // }, [orderID]);
 
-  const handleUpdate = () => {
-    // Handle update logic
+  const handleUpdate = async () => {
+    console.log("all of them", getQRCodeIDs());
+    const orderData = {
+      orderId: orderID,
+      customer: {
+        name: customerName,
+        address: customerAddress,
+        phoneNumber: customerPhoneNumber,
+        email: customerEmail,
+      },
+      qr_code_ids: getQRCodeIDs(),
+    };
+
+    await axios
+      .put(
+        `${serverEndpointSwitch}/api/v1/orders/update-entire-order/${orderData.orderId}`,
+        orderData,
+      )
+      .then(() => alert("Order successfully updated."))
+      .catch(() => alert("Error updating order."));
   };
 
   const handleCheckIn = () => {
@@ -55,21 +83,7 @@ const OrderReview = () => {
 
       {orderID ? (
         <div className="order-details">
-          {/* Display order details using NewOrderForm component */}
-          <OrderForm
-            onSubmitText="Update"
-            onSubmit={() => console.log("on submit")}
-          />
-
-          {/* Buttons for update and check-in */}
-          {/* <div className="update-checkin-buttons">
-            <button type="button" onClick={handleUpdate}>
-              Update
-            </button>
-            <button type="button" onClick={handleCheckIn}>
-              Check-In
-            </button>
-          </div> */}
+          <OrderForm onSubmitText="Update" onSubmit={handleUpdate} />
         </div>
       ) : (
         <p>Loading order...</p>

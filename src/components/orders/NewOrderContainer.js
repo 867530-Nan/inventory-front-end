@@ -10,7 +10,6 @@ const NewOrderContainer = ({}) => {
   const {
     createOrder,
     doSetOrderInformation,
-    orderInformation,
     customerName,
     customerAddress,
     customerPhoneNumber,

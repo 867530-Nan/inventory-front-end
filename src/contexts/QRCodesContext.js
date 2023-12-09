@@ -9,12 +9,15 @@ const QRCodesManagerContext = createContext();
 
 // Create a provider component
 export const QRCodesManagerProvider = ({ children }) => {
-  const [qrCodes, setQRCodes] = useState([]);
   const [stylesByQR, setStylesByQR] = useState({});
 
   const updateStylesByQR = (newQRCode) => {
     if (stylesByQR[newQRCode]) {
-      delete stylesByQR[newQRCode];
+      setStylesByQR((prev) => {
+        const updatedState = { ...prev };
+        delete updatedState[newQRCode];
+        return updatedState;
+      });
     } else {
       axios
         .get(
@@ -30,46 +33,50 @@ export const QRCodesManagerProvider = ({ children }) => {
   };
 
   const setBulkStylesByQr = (codesAndStyles) => {
-    setStylesByQR(codesAndStyles);
+    const reduced = codesAndStyles.reduce((acc, cv) => {
+      return { ...acc, [cv.qr_code]: cv };
+    }, {});
+    setStylesByQR(reduced);
   };
 
   // Create a new QR code
   const addQRCode = (newQRCode) => {
-    setQRCodes((prevQRCodes) => [...prevQRCodes, parseInt(newQRCode)]);
     updateStylesByQR(newQRCode);
   };
 
   // Update a QR code
-  const updateQRCode = (id, updatedQRCode) => {
-    setQRCodes((prevQRCodes) =>
-      prevQRCodes.map((qrCode) => (qrCode.id === id ? updatedQRCode : qrCode)),
-    );
-  };
+  // const updateQRCode = (id, updatedQRCode) => {
+  //   setQRCodes((prevQRCodes) =>
+  //     prevQRCodes.map((qrCode) => (qrCode.id === id ? updatedQRCode : qrCode)),
+  //   );
+  // };
 
   // Delete a QR code
   const deleteQRCode = (qr) => {
-    console.log("the qr", qr);
-    setQRCodes((prevQRCodes) => {
-      return prevQRCodes.filter((qrCode) => qrCode !== qr);
-    });
+    // setQRCodes((prevQRCodes) =>
+    //   prevQRCodes.filter((qrCode) => {
+    //     return qrCode !== qr;
+    //   }),
+    // );
     updateStylesByQR(qr);
   };
 
   // Read: Get all QR codes
-  const getAllQRCodes = () => qrCodes;
+  const getAllQRCodes = () => stylesByQR.map((s) => s.qr_code);
+
+  const getQRCodeIDs = () => Object.values(stylesByQR).map((s) => s.id);
 
   // Read: Get a specific QR code by ID
-  const getQRCodeById = (id) => qrCodes.find((qrCode) => qrCode.id === id);
+  const getQRCodeById = (id) => stylesByQR[id];
 
   const stylesByQRArray = Object.values(stylesByQR);
 
   // Context value
   const contextValue = {
     stylesByQRArray,
-    qrCodes,
     addQRCode,
     stylesByQR,
-    updateQRCode,
+    getQRCodeIDs,
     deleteQRCode,
     getAllQRCodes,
     getQRCodeById,
