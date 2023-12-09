@@ -1,7 +1,7 @@
 import { jsPDF } from "jspdf";
 import moment from "moment";
 
-export const generatePDF = (completedOrder, businessInfo) => {
+export const generatePDF = (orderInformation, businessInfo) => {
   const doc = new jsPDF();
   const lineHeight = 10;
   const margin = 10;
@@ -19,19 +19,19 @@ export const generatePDF = (completedOrder, businessInfo) => {
 
   const addCustomerInfo = () => {
     addSectionHeader("Customer Information:", 0);
-    addText(`Name: ${completedOrder.customer.name}`, 10, yOffsetIncrement);
+    addText(`Name: ${orderInformation.customer.name}`, 10, yOffsetIncrement);
     addText(
-      `Email: ${completedOrder.customer.email}`,
+      `Email: ${orderInformation.customer.email}`,
       10,
       yOffsetIncrement * 2,
     );
     addText(
-      `Address: ${completedOrder.customer.address}`,
+      `Address: ${orderInformation.customer.address}`,
       10,
       yOffsetIncrement * 3,
     );
     addText(
-      `Phone Number: ${completedOrder.customer.phone_number}`,
+      `Phone Number: ${orderInformation.customer.phone_number}`,
       10,
       yOffsetIncrement * 4,
     );
@@ -39,9 +39,9 @@ export const generatePDF = (completedOrder, businessInfo) => {
 
   const addOrderInfo = () => {
     addSectionHeader("Order Information:", yOffsetIncrement * 6);
-    addText(`Order ID: ${completedOrder.order.id}`, 10, yOffsetIncrement * 7);
+    addText(`Order ID: ${orderInformation.order.id}`, 10, yOffsetIncrement * 7);
     addText(
-      `Checkout Date: ${moment(completedOrder.order.checkout_date)}`,
+      `Checkout Date: ${moment(orderInformation.order.checkout_date)}`,
       10,
       yOffsetIncrement * 8,
     );
@@ -50,7 +50,7 @@ export const generatePDF = (completedOrder, businessInfo) => {
   const addCodesAndStylesInfo = () => {
     addSectionHeader("Codes and Styles:", yOffsetIncrement * 10);
     let yOffset = yOffsetIncrement * 11;
-    completedOrder.codesAndStyles.forEach((codeAndStyle) => {
+    orderInformation.codesAndStyles.forEach((codeAndStyle) => {
       addText(`Style: ${codeAndStyle.name}`, 10, yOffset);
       addText(`Color: ${codeAndStyle.color}`, 10, yOffset + yOffsetIncrement);
       addText(

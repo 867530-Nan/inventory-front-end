@@ -8,7 +8,6 @@ const SampleForm = () => {
     texture: "",
     price: "",
     availability: "",
-    image_url: "",
   });
 
   const handleChange = (e) => {
@@ -80,15 +79,6 @@ const SampleForm = () => {
             type="number"
             name="availability"
             value={formData.availability}
-            onChange={handleChange}
-          />
-        </div>
-        <div>
-          <label>Image URL:</label>
-          <input
-            type="text"
-            name="image_url"
-            value={formData.image_url}
             onChange={handleChange}
           />
         </div>

@@ -29,6 +29,10 @@ export const QRCodesManagerProvider = ({ children }) => {
     }
   };
 
+  const setBulkStylesByQr = (codesAndStyles) => {
+    setStylesByQR(codesAndStyles);
+  };
+
   // Create a new QR code
   const addQRCode = (newQRCode) => {
     setQRCodes((prevQRCodes) => [...prevQRCodes, parseInt(newQRCode)]);
@@ -69,6 +73,7 @@ export const QRCodesManagerProvider = ({ children }) => {
     deleteQRCode,
     getAllQRCodes,
     getQRCodeById,
+    setBulkStylesByQr,
   };
 
   return (

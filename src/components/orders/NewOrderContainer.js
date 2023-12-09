@@ -9,20 +9,19 @@ const NewOrderContainer = ({}) => {
   const { stylesByQRArray } = useQRCodesManager();
   const {
     createOrder,
-    onCompletedOrder,
-    completedOrder,
+    doSetOrderInformation,
+    orderInformation,
     customerName,
     customerAddress,
     customerPhoneNumber,
     customerEmail,
   } = useOrders();
 
-  useEffect(() => {
-    if (completedOrder?.order?.id) {
-      console.log("completedOrder.order.id: ", completedOrder.order.id);
-      navigate("/order-confirmation");
-    }
-  }, [completedOrder]);
+  // useEffect(() => {
+  //   if (showConfirmation) {
+  //     navigate("/order-confirmation");
+  //   }
+  // }, [showConfirmation]);
 
   const handleSubmit = (e) => {
     createOrder({
@@ -36,8 +35,8 @@ const NewOrderContainer = ({}) => {
     })
       .then((res) => {
         console.log("great success: ", res.data);
-        onCompletedOrder(res.data);
-        redirect("/order-confirmation");
+        doSetOrderInformation(res.data);
+        navigate("/order-confirmation");
       })
       .catch((e) => console.error("could not create order, sorry man", e));
   };

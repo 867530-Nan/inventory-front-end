@@ -6,10 +6,8 @@ const MyForm = () => {
   const [formData, setFormData] = useState({
     name: "",
     color: "",
-    texture: "",
     price: "",
     inventory: "",
-    image_url: "",
   });
 
   const handleInputChange = (e) => {
@@ -72,23 +70,6 @@ const MyForm = () => {
         </div>
         <div>
           <label
-            htmlFor="texture"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Texture
-          </label>
-          <input
-            type="text"
-            name="texture"
-            id="texture"
-            value={formData.texture}
-            onChange={handleInputChange}
-            className="mt-1 p-2 block w-full border rounded-lg"
-            required
-          />
-        </div>
-        <div>
-          <label
             htmlFor="price"
             className="block text-sm font-medium text-gray-700"
           >
@@ -117,23 +98,6 @@ const MyForm = () => {
             name="inventory"
             id="inventory"
             value={formData.inventory}
-            onChange={handleInputChange}
-            className="mt-1 p-2 block w-full border rounded-lg"
-            required
-          />
-        </div>
-        <div>
-          <label
-            htmlFor="image_url"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Image URL
-          </label>
-          <input
-            type="url"
-            name="image_url"
-            id="image_url"
-            value={formData.image_url}
             onChange={handleInputChange}
             className="mt-1 p-2 block w-full border rounded-lg"
             required

@@ -7,11 +7,11 @@ import OrderReview from "./OrderReview.component";
 
 function OrdersContainer() {
   const [forcedKey, setForcedKey] = useState("");
-  const { orders, fetchOrders, resetCompletedOrder } = useOrders();
+  const { orders, fetchOrders, resetOrderInformation } = useOrders();
 
   React.useEffect(() => {
     fetchOrders();
-    resetCompletedOrder();
+    resetOrderInformation();
   }, []);
 
   const onOrderClick = (key) => {

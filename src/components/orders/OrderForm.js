@@ -8,7 +8,7 @@ import QRCodeManager from "../QRCodeManager";
 import { useQRCodesManager } from "../../contexts/QRCodesContext";
 import { useOrders } from "../../contexts/OrdersContext";
 
-const OrderForm = ({ onSubmit }) => {
+const OrderForm = ({ onSubmit, onSubmitText = "Submit" }) => {
   const {
     customerName,
     setCustomerName,
@@ -132,7 +132,7 @@ const OrderForm = ({ onSubmit }) => {
             onClick={() => onSubmit()}
             onKeyUp={handleKeyPress}
           >
-            Submit
+            {onSubmitText}
           </button>
         </div>
       </form>

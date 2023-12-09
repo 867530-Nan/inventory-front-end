@@ -24,9 +24,12 @@ const OrdersProvider = ({ children }) => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [completedOrder, setCompletedOrder] = useState({});
+  const [orderInformation, setOrderInformation] = useState({});
   const [customerName, setCustomerName] = useState("");
   const [customerAddress, setCustomerAddress] = useState("");
+  const [orderID, setOrderID] = useState("");
+  const [orderCheckin, setOrderCheckin] = React.useState("");
+  const [orderCheckout, setOrderCheckout] = React.useState("");
   const [customerPhoneNumber, setCustomerPhoneNumber] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerOptions, setCustomerOptions] = useState([]);
@@ -35,7 +38,9 @@ const OrdersProvider = ({ children }) => {
   const fetchOrders = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${serverEndpointSwitch}/api/v1/orders`);
+      const response = await axios.get(
+        `${serverEndpointSwitch}/api/v1/orders/dashboard`,
+      );
       setOrders(response.data);
     } catch (error) {
       setError(error.message);
@@ -44,12 +49,23 @@ const OrdersProvider = ({ children }) => {
     }
   };
 
-  const resetCompletedOrder = () => {
-    setCompletedOrder({});
+  const resetOrderInformation = () => {
+    setOrderInformation({});
   };
 
-  const onCompletedOrder = (completedOrder) => {
-    setCompletedOrder(completedOrder);
+  const doSetOrderInformation = (orderInformation) => {
+    setOrderInformation(orderInformation);
+  };
+
+  const setOrderReview = (customer, order) => {
+    const { name, address, phone_number, email } = customer;
+    setCustomerName(name);
+    setCustomerAddress(address);
+    setCustomerPhoneNumber(phone_number);
+    setCustomerEmail(email);
+    setOrderID(order.id);
+    setOrderCheckin(order.checkin_date);
+    setOrderCheckout(order.checkout_date);
   };
 
   const createOrder = async (orderData) => {
@@ -116,10 +132,13 @@ const OrdersProvider = ({ children }) => {
     fetchOrders,
     createOrder,
     updateOrder,
+    orderID,
+    orderCheckin,
+    orderCheckout,
     deleteOrder,
-    onCompletedOrder,
-    completedOrder,
-    resetCompletedOrder,
+    doSetOrderInformation,
+    orderInformation,
+    resetOrderInformation,
     customerName,
     setCustomerName,
     customerAddress,
@@ -132,6 +151,7 @@ const OrdersProvider = ({ children }) => {
     setCustomerOptions,
     selectedCustomer,
     setSelectedCustomer,
+    setOrderReview,
   };
 
   return (

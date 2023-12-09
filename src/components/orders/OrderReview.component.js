@@ -1,5 +1,82 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
+import { serverEndpointSwitch } from "../../utils/common";
+import OrderForm from "./OrderForm";
+import { useOrders } from "../../contexts/OrdersContext";
+import { useQRCodesManager } from "../../contexts/QRCodesContext";
 
-export default function OrderReview() {
-  return <div>check it</div>;
-}
+const OrderReview = () => {
+  const [orderId, setOrderId] = useState("");
+  const { orderInformation, setOrderReview, orderID } = useOrders();
+  const { setBulkStylesByQr } = useQRCodesManager();
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.get(
+        `${serverEndpointSwitch}/api/v1/orders/${orderId}`,
+      );
+      const { order, customer, codesAndStyles } = response.data;
+      setOrderReview(customer, order);
+      setBulkStylesByQr(codesAndStyles);
+    } catch (error) {
+      console.error("Error loading order:", error);
+    }
+  };
+
+  React.useEffect(() => {
+    if (orderID) setOrderId(orderID);
+  }, [orderID]);
+
+  const handleUpdate = () => {
+    // Handle update logic
+  };
+
+  const handleCheckIn = () => {
+    // Handle check-in logic
+  };
+
+  return (
+    <div className="order-review-container">
+      <h2>Review Order & Return Samples</h2>
+      <div className="order-review-form">
+        <label>
+          Order Number:
+          <input
+            type="number"
+            value={orderId}
+            onChange={(e) => setOrderId(e.target.value)}
+          />
+        </label>
+        {orderId.length ? (
+          <button type="button" onClick={handleSubmit}>
+            Submit
+          </button>
+        ) : null}
+      </div>
+
+      {orderID ? (
+        <div className="order-details">
+          {/* Display order details using NewOrderForm component */}
+          <OrderForm
+            onSubmitText="Update"
+            onSubmit={() => console.log("on submit")}
+          />
+
+          {/* Buttons for update and check-in */}
+          {/* <div className="update-checkin-buttons">
+            <button type="button" onClick={handleUpdate}>
+              Update
+            </button>
+            <button type="button" onClick={handleCheckIn}>
+              Check-In
+            </button>
+          </div> */}
+        </div>
+      ) : (
+        <p>Loading order...</p>
+      )}
+    </div>
+  );
+};
+
+export default OrderReview;
