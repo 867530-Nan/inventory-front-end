@@ -3,13 +3,15 @@ import OrdersDashboard from "./OrdersDashboard";
 import React, { useState } from "react";
 import { useOrders } from "../../contexts/OrdersContext";
 import TabContainer from "../generic/TabContainer";
+import OrderReview from "./OrderReview.component";
 
 function OrdersContainer() {
   const [forcedKey, setForcedKey] = useState("");
-  const { orders, fetchOrders } = useOrders();
+  const { orders, fetchOrders, resetCompletedOrder } = useOrders();
 
   React.useEffect(() => {
     fetchOrders();
+    resetCompletedOrder();
   }, []);
 
   const onOrderClick = (key) => {
@@ -39,6 +41,11 @@ function OrdersContainer() {
       eventKey: "new",
       title: "New +",
       component: <NewOrderForm />,
+    },
+    {
+      eventKey: "checkin",
+      title: "Check-In",
+      component: <OrderReview />,
     },
   ];
 

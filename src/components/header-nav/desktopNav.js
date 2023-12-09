@@ -26,6 +26,7 @@ export default function DesktopNav() {
           <NavLink
             key={s.to}
             to={s.to}
+            onClick={() => console.log("clicking buttons")}
             className={`${
               location.pathname === s.to
                 ? "bg-blue-500 text-white hover:bg-blue-700"

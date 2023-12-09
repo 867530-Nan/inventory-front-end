@@ -2,8 +2,11 @@ import React from "react";
 import { useOrders } from "../../contexts/OrdersContext"; // Replace with your actual context file
 import { generatePDF } from "../../utils/generatePDF";
 import moment from "moment";
+import { useNavigate } from "react-router-dom";
+
 const OrderConfirmation = () => {
-  const { completedOrder } = useOrders();
+  const { completedOrder, resetCompletedOrder } = useOrders();
+  const navigate = useNavigate();
 
   const businessInfo = {
     name: "A-Z Flooring",
@@ -17,6 +20,11 @@ const OrderConfirmation = () => {
       Friday    9 am–5 pm
       Saturday  10 am–1 pm
     `,
+  };
+
+  const closeConfirmation = () => {
+    resetCompletedOrder();
+    navigate("/orders");
   };
 
   const handlePrint = () => {
@@ -90,18 +98,24 @@ const OrderConfirmation = () => {
         </div>
 
         {/* Buttons for Print and Email */}
-        <div className="flex justify-between mt-4">
+        <div className="flex flex-col mt-4">
           <button
-            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none"
+            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none mb-2"
             onClick={handlePrint}
           >
             Print PDF
           </button>
           <button
-            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 focus:outline-none"
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 focus:outline-none mb-2"
             onClick={handleEmail}
           >
             Email PDF
+          </button>
+          <button
+            className="bg-gray-300 text-black px-4 py-2 rounded hover:bg-gray-400 focus:outline-none"
+            onClick={closeConfirmation}
+          >
+            Close
           </button>
         </div>
       </div>

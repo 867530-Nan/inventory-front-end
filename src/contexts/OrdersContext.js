@@ -38,6 +38,10 @@ const OrdersProvider = ({ children }) => {
     }
   };
 
+  const resetCompletedOrder = () => {
+    setCompletedOrder({});
+  };
+
   const onCompletedOrder = (completedOrder) => {
     setCompletedOrder(completedOrder);
   };
@@ -45,7 +49,10 @@ const OrdersProvider = ({ children }) => {
   const createOrder = async (orderData) => {
     try {
       setLoading(true);
-      await axios.post(`${serverEndpointSwitch}/api/v1/orders`, orderData);
+      return await axios.post(
+        `${serverEndpointSwitch}/api/v1/orders`,
+        orderData,
+      );
     } catch (error) {
       setError(error.message);
     } finally {
@@ -106,6 +113,7 @@ const OrdersProvider = ({ children }) => {
     deleteOrder,
     onCompletedOrder,
     completedOrder,
+    resetCompletedOrder,
   };
 
   return (

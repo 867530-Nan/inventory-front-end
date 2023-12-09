@@ -26,7 +26,7 @@ const NewOrderForm = ({}) => {
       navigate("/order-confirmation");
     }
   }, [completedOrder]);
-
+  console.log("completed order: ", completedOrder);
   const handleCustomerNameChange = async (e) => {
     const inputValue = e.target.value;
     setCustomerName(inputValue);
@@ -67,9 +67,9 @@ const NewOrderForm = ({}) => {
       .then((res) => {
         console.log("great success: ", res.data);
         onCompletedOrder(res.data);
-        return redirect("/order-confirmation");
+        redirect("/order-confirmation");
       })
-      .catch((e) => console.error("could not create order, sorry man"));
+      .catch((e) => console.error("could not create order, sorry man", e));
   };
 
   const handleKeyPress = (e) => {

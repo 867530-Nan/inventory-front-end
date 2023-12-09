@@ -38,7 +38,7 @@ const Router = () => {
 
   return (
     <BrowserRouter>
-      <div className="flex h-screen overflow-hidden">
+      <div className="flex max-h-full overflow-hidden">
         <div className="w-1/5 overflow-y-auto fixed inset-y-0 left-0">
           {isNotMobile && <DesktopNav />}
           {isMobile && <MobileNav />}

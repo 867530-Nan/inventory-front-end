@@ -134,17 +134,19 @@ const QRCodeManager = () => {
           <table style={{ width: "100%", tableLayout: "fixed" }}>
             <thead>
               <tr>
-                <th style={{ width: "50px" }}></th>
                 <th>ID</th>
                 <th>Style</th>
                 <th>Color</th>
+                <th style={{ width: "50px" }}></th>
               </tr>
             </thead>
             <tbody>
               {stylesByQRArray.map((order) => {
-                console.log("the order", order.qr_code);
                 return (
                   <tr key={order.id}>
+                    <td>{order.qr_code}</td>
+                    <td>{order.name} </td>
+                    <td>{order.color} </td>
                     <td>
                       <button
                         type="button"
@@ -154,10 +156,6 @@ const QRCodeManager = () => {
                         X
                       </button>
                     </td>
-
-                    <td>{order.qr_code}</td>
-                    <td>{order.name} </td>
-                    <td>{order.color} </td>
                   </tr>
                 );
               })}
