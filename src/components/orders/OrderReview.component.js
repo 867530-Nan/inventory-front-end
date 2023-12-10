@@ -4,8 +4,10 @@ import { serverEndpointSwitch } from "../../utils/common";
 import OrderForm from "./OrderForm";
 import { useOrders } from "../../contexts/OrdersContext";
 import { useQRCodesManager } from "../../contexts/QRCodesContext";
+import { useBannerAlert } from "../../contexts/BannerAlertContext";
+import { useNavigate } from "react-router-dom";
 
-const OrderReview = () => {
+const OrderReview = ({ onCheckin }) => {
   const {
     setOrderReview,
     orderID,
@@ -17,7 +19,9 @@ const OrderReview = () => {
     customerEmail,
     setOrderID,
   } = useOrders();
+  const { showSuccessAlert, showFailAlert } = useBannerAlert();
   const { setBulkStylesByQr, getQRCodeIDs } = useQRCodesManager();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
@@ -59,12 +63,32 @@ const OrderReview = () => {
   };
 
   const handleCheckIn = () => {
-    // Handle check-in logic
+    const userConfirmed = window.confirm(`Check In Order #${orderID}?`);
+    if (userConfirmed) {
+      axios
+        .put(`${serverEndpointSwitch}/api/v1/orders/check-in/${orderID}`)
+        .then(() => {
+          showSuccessAlert(`Successfully Checked In Order ${orderID}`);
+          onCheckin();
+        })
+        .catch((err) => {
+          showFailAlert("Error checking in, try again.");
+        });
+    }
   };
 
   return (
     <div className="order-review-container">
-      <h2>Review Order & Return Samples</h2>
+      <div>
+        <h1>Review Order & Return Samples</h1>
+        <button
+          type="button"
+          className={`py-2 px-4 rounded text-white font-bold bg-blue-300`}
+          onClick={handleCheckIn}
+        >
+          Check In
+        </button>
+      </div>
       <div className="order-review-form">
         <label>
           Order Number:

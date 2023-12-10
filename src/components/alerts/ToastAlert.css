@@ -1,0 +1,32 @@
+/* ToastAlert.css */
+
+.toast-alert {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  padding: 16px;
+  border-radius: 4px;
+  opacity: 0;
+  transform: translateY(-100%);
+  transition: opacity 0.5s, transform 0.5s;
+}
+
+.toast-alert.success {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.toast-alert.fail {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.toast-alert.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.toast-alert.hidden {
+  opacity: 0;
+  transform: translateY(-100%);
+}

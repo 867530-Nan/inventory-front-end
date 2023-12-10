@@ -4,7 +4,13 @@ import Nav from "react-bootstrap/Nav";
 import Row from "react-bootstrap/Row";
 import Tab from "react-bootstrap/Tab";
 
-const TabContainer = ({ initialKey, tabs, forcedKey }) => {
+const TabContainer = ({
+  initialKey,
+  tabs,
+  forcedKey,
+  resetForced,
+  onHomeLand,
+}) => {
   const [key, setKey] = useState(tabs[0].eventKey);
 
   React.useEffect(() => {
@@ -14,8 +20,15 @@ const TabContainer = ({ initialKey, tabs, forcedKey }) => {
   }, [forcedKey]);
 
   React.useEffect(() => {
-    setKey(initialKey);
-  }, []);
+    if (key === initialKey) {
+      resetForced(key);
+      onHomeLand();
+    }
+  }, [key]);
+
+  console.log("initialKey", initialKey);
+  console.log("forcedKey", forcedKey);
+  console.log("key", key);
 
   return (
     <div className=" h-screen m-2 mt-2 mb-0">

@@ -53,11 +53,6 @@ export const QRCodesManagerProvider = ({ children }) => {
 
   // Delete a QR code
   const deleteQRCode = (qr) => {
-    // setQRCodes((prevQRCodes) =>
-    //   prevQRCodes.filter((qrCode) => {
-    //     return qrCode !== qr;
-    //   }),
-    // );
     updateStylesByQR(qr);
   };
 
@@ -81,6 +76,7 @@ export const QRCodesManagerProvider = ({ children }) => {
     getAllQRCodes,
     getQRCodeById,
     setBulkStylesByQr,
+    setStylesByQR,
   };
 
   return (

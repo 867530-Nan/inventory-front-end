@@ -68,6 +68,9 @@ const OrdersDashboard = ({ onRowClick }) => {
               data={filteredData.map((order) => ({
                 ...order,
                 checkout_date: formattedDate(order.checkout_date),
+                checkin_date: order.checkin_date
+                  ? formattedDate(order.checkin_date)
+                  : "Out",
               }))}
               columns={[
                 {
@@ -81,6 +84,10 @@ const OrdersDashboard = ({ onRowClick }) => {
                 {
                   Header: "Checkout Date",
                   accessor: "checkout_date",
+                },
+                {
+                  Header: "Checkin Date",
+                  accessor: "checkin_date",
                 },
               ]}
             />

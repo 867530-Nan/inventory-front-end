@@ -10,15 +10,16 @@ import { serverEndpointSwitch } from "../../utils/common";
 import { useQRCodesManager } from "../../contexts/QRCodesContext";
 
 function OrdersContainer() {
-  const [forcedKey, setForcedKey] = useState("");
+  const [forcedKey, setForcedKey] = useState("dashboard");
   const {
     orders,
     setOrderReview,
     fetchOrders,
     setOrderID,
     resetOrderInformation,
+    resetOrderFormInfo,
   } = useOrders();
-  const { setBulkStylesByQr } = useQRCodesManager();
+  const { setBulkStylesByQr, setStylesByQR } = useQRCodesManager();
   React.useEffect(() => {
     fetchOrders();
     resetOrderInformation();
@@ -28,16 +29,27 @@ function OrdersContainer() {
     setForcedKey(key);
   };
 
+  const resetForced = (key) => {
+    setForcedKey(key);
+  };
+
+  const resetTabs = () => {
+    setForcedKey("dashboard");
+  };
+
   const handleOrderClick = async ({ order_id }) => {
-    console.log("the passed id", order_id);
     const response = await axios.get(
       `${serverEndpointSwitch}/api/v1/orders/${order_id}`,
     );
-    console.log(" thes response", response);
     const { order, customer, codesAndStyles } = response.data;
     setOrderReview(customer, order);
     setBulkStylesByQr(codesAndStyles);
     setForcedKey("review");
+  };
+
+  const handleLandingAtHome = () => {
+    resetOrderFormInfo();
+    setStylesByQR({});
   };
 
   const tabs = [
@@ -55,17 +67,23 @@ function OrdersContainer() {
     {
       eventKey: "new",
       title: "New +",
-      component: <NewOrderContainer />,
+      component: <NewOrderContainer onClose={resetTabs} />,
     },
     {
       eventKey: "review",
       title: "Review",
-      component: <OrderReview />,
+      component: <OrderReview onCheckin={resetTabs} />,
     },
   ];
 
   return (
-    <TabContainer tabs={tabs} initialKey="dashboard" forcedKey={forcedKey} />
+    <TabContainer
+      tabs={tabs}
+      initialKey="dashboard"
+      forcedKey={forcedKey}
+      resetForced={resetForced}
+      onHomeLand={handleLandingAtHome}
+    />
   );
 }
 

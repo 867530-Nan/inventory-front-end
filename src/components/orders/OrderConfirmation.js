@@ -4,7 +4,7 @@ import { generatePDF } from "../../utils/generatePDF";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
 
-const OrderConfirmation = () => {
+const OrderConfirmation = ({ onClose }) => {
   const { orderInformation, resetOrderInformation } = useOrders();
   const navigate = useNavigate();
 
@@ -24,13 +24,13 @@ const OrderConfirmation = () => {
 
   React.useEffect(() => {
     if (!orderInformation.id) {
-      navigate("/orders");
+      onClose();
     }
   }, []);
 
   const closeConfirmation = () => {
     resetOrderInformation();
-    navigate("/orders");
+    onClose();
   };
 
   const handlePrint = () => {
@@ -57,12 +57,11 @@ const OrderConfirmation = () => {
     // If no completed order is available, you might want to handle this case
     return <div>No order details available.</div>;
   }
-
+  console.log("orderInformation", orderInformation);
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      {orderInformation.id ? (
+    <div className="flex items-center justify-cente">
+      {orderInformation.order.id ? (
         <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-          {/* Order Information Header */}
           <h2 className="text-2xl font-semibold mb-4">
             Order #{orderInformation.order.id} Confirmation
           </h2>

@@ -35,6 +35,18 @@ const OrdersProvider = ({ children }) => {
   const [customerOptions, setCustomerOptions] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
 
+  const resetOrderFormInfo = () => {
+    setOrderID("");
+    setOrderInformation({});
+    setCustomerName("");
+    setCustomerAddress("");
+    setOrderCheckin("");
+    setOrderCheckout("");
+    setCustomerPhoneNumber("");
+    setCustomerEmail("");
+    setSelectedCustomer(null);
+  };
+
   const fetchOrders = async () => {
     try {
       setLoading(true);
@@ -154,6 +166,7 @@ const OrdersProvider = ({ children }) => {
     selectedCustomer,
     setSelectedCustomer,
     setOrderReview,
+    resetOrderFormInfo,
   };
 
   return (

@@ -10,19 +10,36 @@ const StylesProvider = ({ children }) => {
   const [uniqueStyleNamesWithColors, setUniqueStyleNamesWithColors] = useState(
     [],
   );
+  const [styleColorsAndQRs, setStyleColorsAndQRs] = useState([]);
+
+  const fetchAndSetQRCodes = async () => {
+    if (selectedStyle) {
+      try {
+        const response = await axios.post(
+          `${serverEndpointSwitch}/api/v1/styles/get-style-info-by-name`,
+          { name: selectedStyle[0].name },
+        );
+        setStyleColorsAndQRs(response.data);
+      } catch (error) {
+        console.error("Error fetching QR codes:", error);
+      }
+    }
+  };
 
   useEffect(() => {
-    const fetchStyles = async () => {
-      try {
-        const response = await axios.get(
-          `${serverEndpointSwitch}/api/v1/styles`,
-        );
-        setStyles(response.data);
-      } catch (error) {
-        console.error("Error fetching styles:", error);
-      }
-    };
+    fetchAndSetQRCodes();
+  }, [selectedStyle]);
 
+  const fetchStyles = async () => {
+    try {
+      const response = await axios.get(`${serverEndpointSwitch}/api/v1/styles`);
+      setStyles(response.data);
+    } catch (error) {
+      console.error("Error fetching styles:", error);
+    }
+  };
+
+  useEffect(() => {
     fetchStyles();
   }, []); // Run the effect only once on component mount
 
@@ -51,6 +68,8 @@ const StylesProvider = ({ children }) => {
       setUniqueStyleNamesWithColors(result);
     }
   }, [styles]);
+
+  const addNewQrToStyle = () => {};
 
   const addStyle = async (newStyle) => {
     try {
@@ -90,8 +109,37 @@ const StylesProvider = ({ children }) => {
     // Convert Set back to an array for the final result
     const uniqueNamesArray = Array.from(uniqueNamesSet);
 
-    return uniqueNamesArray;
+    const sorted = uniqueNamesArray.sort((a, b) => {
+      if (a > b) return 1;
+      if (a < b) return -1;
+      else return 0;
+    });
+
+    return sorted;
   }
+
+  const deleteQRByStyle = (qr_single_id, color, name) => {
+    setStyleColorsAndQRs((prev) => {
+      const updatedState = { ...prev };
+      if (updatedState[name] && updatedState[name][color]) {
+        updatedState[name][color] = updatedState[name][color].filter(
+          (item) => item.qr_single_id !== qr_single_id,
+        );
+
+        // Remove the color key if the array becomes empty
+        if (updatedState[name][color].length === 0) {
+          delete updatedState[name][color];
+        }
+
+        // Remove the name key if all colors are removed
+        if (Object.keys(updatedState[name]).length === 0) {
+          delete updatedState[name];
+        }
+      }
+
+      return updatedState;
+    });
+  };
 
   return (
     <StylesContext.Provider
@@ -103,7 +151,12 @@ const StylesProvider = ({ children }) => {
         onSelectStyle,
         uniqueStyleNamesWithColors,
         filterStylesByName,
+        styleColorsAndQRs,
         filterStylesByColor,
+        deleteQRByStyle,
+        fetchAndSetQRCodes,
+        addNewQrToStyle,
+        fetchStyles,
       }}
     >
       {children}

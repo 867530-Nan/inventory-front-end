@@ -1,32 +1,55 @@
-import React from "react";
+import React, { useState } from "react";
+import QRCode from "react-qr-code";
+import { serverEndpointSwitch } from "../../utils/common";
+import axios from "axios";
+import { useQRCodesManager } from "../../contexts/QRCodesContext";
+import { useStylesContext } from "../../contexts/StylesContext";
 
-const SampleList = ({ samples, onAddSample, onDeleteSample }) => (
-  <ul className="space-y-4">
-    {samples.map((sample) => (
-      <li
-        key={sample.id}
-        className="flex items-center justify-between border p-2"
-      >
-        <span>
-          Sample ID: {sample.id} - Checkout Date: {sample.checkout_date}
+const SampleItem = ({ sample, onDeleteSample }) => {
+  const [isHovered, setIsHovered] = useState(false);
+  const determineCheckoutStatus = () => {
+    if (sample.checkout_date && sample.checkin_date == null) return true;
+    else return false;
+  };
+  return (
+    <li
+      className="flex flex-col align-middle justify-between border p-2 rounded mr-2"
+      style={{ width: "125px" }}
+    >
+      <span className="text-center my-2">
+        #{sample.qr_code}
+        <hr />
+        <span className="font-bold">
+          {determineCheckoutStatus() ? "Checked Out" : " - "}
         </span>
-        <button
-          onClick={() => onDeleteSample(sample.id)}
-          className="bg-red-500 text-white px-2 py-1 rounded"
-        >
-          Delete
-        </button>
-      </li>
-    ))}
-    <li>
+      </span>
+      <div>
+        <QRCode size={100} value={sample.qr_code.toString()} />
+      </div>
       <button
-        onClick={onAddSample}
-        className="bg-green-500 text-white px-4 py-2 rounded"
+        onClick={() => onDeleteSample(sample)}
+        className="bg-red-500 text-white px-2 py-1 rounded mt-2"
       >
-        Add Sample
+        Archive
       </button>
     </li>
-  </ul>
+  );
+};
+
+const SampleList = ({ samples, onAddSample, onDeleteSample }) => (
+  <div>
+    <ul className="flex flex-wrap">
+      {samples.map((sample) => {
+        return <SampleItem onDeleteSample={onDeleteSample} sample={sample} />;
+      })}
+    </ul>
+    <button
+      onClick={() => onAddSample(samples[0].style_id)}
+      className="bg-green-500 text-white px-4 py-2 rounded mt-3"
+    >
+      Add Sample
+    </button>
+  </div>
 );
 
 const StyleColorList = ({ styleColorData, onAddSample, onDeleteSample }) => (
@@ -60,15 +83,25 @@ const StyleList = ({ styleData, onAddSample, onDeleteSample }) => (
 );
 
 const SampleManagementComponent = ({ data }) => {
-  console.log("the data", data);
-  const handleAddSample = (style, color) => {
-    // Handle adding a sample for the given style and color
-    console.log(`Add sample for ${style} - ${color}`);
+  const { deleteQRByStyle, fetchAndSetQRCodes } = useStylesContext();
+
+  const handleAddSample = async (style_id) => {
+    await axios
+      .post(`${serverEndpointSwitch}/api/v1/qr-singles`, {
+        style_id: style_id,
+      })
+      .then((res) => fetchAndSetQRCodes())
+      .catch((err) => console.log("error deleting", err));
   };
 
-  const handleDeleteSample = (sampleId) => {
-    // Handle deleting the sample with the given ID
-    console.log(`Delete sample with ID: ${sampleId}`);
+  const handleDeleteSample = async (sample) => {
+    const { qr_single_id, color, name } = sample;
+    await axios
+      .post(
+        `${serverEndpointSwitch}/api/v1/qr-singles/updateIsArchive/${qr_single_id}`,
+      )
+      .then(() => deleteQRByStyle(qr_single_id, color, name))
+      .catch((err) => console.log("error deleting", err));
   };
 
   return (
