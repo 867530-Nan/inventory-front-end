@@ -29,7 +29,6 @@ const OrderConfirmation = ({ onClose }) => {
   }, []);
 
   const closeConfirmation = () => {
-    resetOrderInformation();
     onClose();
   };
 

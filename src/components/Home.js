@@ -1,13 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import MostPopularStyles from "./dashboard/MostPopularStyles";
+import ZeroInventoryStyles from "./dashboard/ZeroInventoryStyles";
+import { useDashboardContext } from "../contexts/DashboardContext";
 
 const Dashboard = () => {
-  // Placeholder data (replace with actual data)
+  const { totalOrdersCount, totalNoCheckedOutSamples } = useDashboardContext();
   const stats = [
-    { title: "Samples at Inventory 0", value: 150 },
-    { title: "Most Popular Sample", value: "Sample A" },
-    { title: "Samples Checked Out", value: 120 },
-    { title: "Current Orders", value: 10 },
+    { title: "Samples Checked Out", value: totalNoCheckedOutSamples },
+    { title: "Current Orders", value: totalOrdersCount },
+    { title: "Zero Inventory Samples", component: <ZeroInventoryStyles /> },
+    {
+      title: "Most Popular Sample",
+      component: <MostPopularStyles />,
+    },
   ];
 
   return (
@@ -16,14 +21,14 @@ const Dashboard = () => {
 
       <div className="grid grid-cols-2 gap-8">
         {stats.map((stat, index) => (
-          <Link
+          <div
             key={index}
-            to={`/${stat.title.toLowerCase().replace(/\s/g, "-")}`}
             className="bg-white p-6 rounded-md shadow-md transition duration-300 ease-in-out transform hover:scale-105"
           >
             <h3 className="text-lg font-bold mb-2">{stat.title}</h3>
             <p className="text-2xl">{stat.value}</p>
-          </Link>
+            {stat.component ? stat.component : null}
+          </div>
         ))}
       </div>
     </div>

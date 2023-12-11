@@ -5,6 +5,7 @@ import { StylesProvider } from "./StylesContext";
 import { OrdersProvider } from "./OrdersContext";
 import { QRCodesManagerProvider } from "./QRCodesContext";
 import { BannerAlertProvider } from "./BannerAlertContext";
+import { DashboardProvider } from "./DashboardContext";
 
 export default function RootProvider({ children }) {
   return (
@@ -12,7 +13,9 @@ export default function RootProvider({ children }) {
       <StylesProvider>
         <OrdersProvider>
           <QRCodesManagerProvider>
-            <BannerAlertProvider>{children}</BannerAlertProvider>
+            <BannerAlertProvider>
+              <DashboardProvider>{children}</DashboardProvider>
+            </BannerAlertProvider>
           </QRCodesManagerProvider>
         </OrdersProvider>
       </StylesProvider>

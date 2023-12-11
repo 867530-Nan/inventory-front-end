@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "tw-elements-react/dist/css/tw-elements-react.min.css";
+import "mdbreact/dist/css/mdb.css";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

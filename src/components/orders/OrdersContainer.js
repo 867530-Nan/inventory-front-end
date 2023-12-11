@@ -33,7 +33,7 @@ function OrdersContainer() {
     setForcedKey(key);
   };
 
-  const resetTabs = () => {
+  const returnViewToHome = () => {
     setForcedKey("dashboard");
   };
 
@@ -67,12 +67,12 @@ function OrdersContainer() {
     {
       eventKey: "new",
       title: "New +",
-      component: <NewOrderContainer onClose={resetTabs} />,
+      component: <NewOrderContainer onClose={returnViewToHome} />,
     },
     {
       eventKey: "review",
       title: "Review",
-      component: <OrderReview onCheckin={resetTabs} />,
+      component: <OrderReview onCheckin={returnViewToHome} />,
     },
   ];
 
